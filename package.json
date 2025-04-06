@@ -2,7 +2,7 @@
   "name": "opsv-snd-editor",
   "displayName": "Opsv S&D Editor",
   "description": "Opensurvey Editor Snippets and shourtCuts",
-  "publisher": "Opensurvey Chuck (Chan.lee) / Chuck.lee@opensurvey.io",
+  "publisher": "Opensurvey-Chuck",
   "icon": "images/icon.png",
   "version": "0.0.1",
   "repository": {
@@ -78,18 +78,20 @@
     "lint": "eslint src",
     "test": "vscode-test",
     "build": "tsc",
-    "package": "vsce package && (if not exist version mkdir version) && move opsv-snd-editor-package-*.vsix version/",
+    "package": "vsce package && shx mkdir -p version && shx mv opsv-snd-editor*.vsix version/",
     "publish": "vsce publish"
   },
   "devDependencies": {
-    "@types/vscode": "^1.99.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.99.0",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
-    "eslint": "^9.23.0",
-    "typescript": "^5.8.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.23.0",
+    "shx": "^0.4.0",
+    "typescript": "^5.8.2",
+    "vsce": "^2.15.0"
   }
 }
