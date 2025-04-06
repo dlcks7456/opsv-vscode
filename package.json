@@ -5,6 +5,10 @@
   "publisher": "Opensurvey Chuck (Chan.lee) / Chuck.lee@opensurvey.io",
   "icon": "images/icon.png",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dlcks7456/opsv-vscode.git"
+  },
   "engines": {
     "vscode": "^1.99.0"
   },
