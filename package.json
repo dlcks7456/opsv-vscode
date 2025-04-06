@@ -1,0 +1,91 @@
+{
+  "name": "opsv-snd-editor",
+  "displayName": "Opsv S&D Editor",
+  "description": "Opensurvey Editor Snippets and shourtCuts",
+  "publisher": "Opensurvey Chuck (Chan.lee) / Chuck.lee@opensurvey.io",
+  "icon": "images/icon.png",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:html"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "opsv-snd-editor.copyForEditor",
+        "title": "1줄로 복사"
+      },
+      {
+        "command": "opsv-snd-editor.createLabel",
+        "title": "label 태그 생성 (순차 적용)"
+      },
+      {
+        "command": "opsv-snd-editor.createLabelWithValue",
+        "title": "label 태그 생성 (코드 매칭)"
+      },
+      {
+        "command": "opsv-snd-editor.createInputTexts",
+        "title": "복수 주관식 문자형 HTML 생성 단축키"
+      },
+      {
+        "command": "opsv-snd-editor.createInputNumbers",
+        "title": "복수 주관식 숫자형 HTML 생성 단축키"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "opsv-snd-editor.copyForEditor",
+        "key": "ctrl+c",
+        "when": "editorTextFocus && editorLangId == 'html'"
+      },
+      {
+        "command": "opsv-snd-editor.createLabel",
+        "key": "ctrl+1",
+        "when": "editorTextFocus && editorLangId == 'html'"
+      },
+      {
+        "command": "opsv-snd-editor.createLabelWithValue",
+        "key": "ctrl+shift+1",
+        "when": "editorTextFocus && editorLangId == 'html'"
+      },
+      {
+        "command": "opsv-snd-editor.createInputTexts",
+        "key": "ctrl+t",
+        "when": "editorTextFocus && editorLangId == 'html'"
+      },
+      {
+        "command": "opsv-snd-editor.createInputNumbers",
+        "key": "ctrl+n",
+        "when": "editorTextFocus && editorLangId == 'html'"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "build": "tsc",
+    "package": "vsce package && (if not exist version mkdir version) && move opsv-snd-editor-package-*.vsix version/",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.99.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^9.23.0",
+    "typescript": "^5.8.2",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
