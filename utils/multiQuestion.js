@@ -118,7 +118,7 @@ class MultiText {
     this.qnum = targetQuestionNumber;
     this.baseId = multiBaseId;
     this.baseNode = document.querySelector(this.baseId);
-    this.nodes = document.querySelectorAll(`${multiBaseId} .multi`);
+    this.nodes = document.querySelectorAll(`${multiBaseId} .opsv-multi`);
     this.inputs = document.querySelectorAll(`${multiBaseId} input[type="text"]`);
     this.hasLabels = [...this.nodes].some((node) => node.querySelector('label'));
     this.target = document.querySelector(`#answer${this.qnum}`);
@@ -314,7 +314,7 @@ const setMultiQuestion = (qnum, multiBaseId, questionType) => {
         text-align: right;
     }
 
-	div.multi {
+	div.opsv-multi {
 		display: flex;
 		flex-direction: column;
 		gap: 5px;

@@ -132,6 +132,10 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
   const trimLine = qidLine.split('-').map((txt) => txt.trim());
   const qnumber = trimLine[0];
 
+  /* 나중에 삭제될 항목들 */
+  const styleProp = `style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px;"`;
+  /* ----------------- */
+
   let replaceHtml = '';
   if (hasLabels) {
     const labelMatches = base.match(/<label\b[^>]*>(.*?)<\/label>/gs);
@@ -143,11 +147,11 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
           const forValue = forMatch[1];
           const setId = `${qnumber}x${forValue}`;
           const updatedLabel = label.replace(/for\s*=\s*["'][^"']*["']/, `for="${setId}"`);
-          return `\t<div class="multi">\n\t\t${updatedLabel}\n\t\t<input type="text" id="${setId}" />\n\t</div>`;
+          return `\t<div class="opsv-multi">\n\t\t${updatedLabel}\n\t\t<input type="${inputType}" class="multi" id="${setId}" ${styleProp}/>\n\t</div>`;
         } else {
           const setId = `${qnumber}x${index + 1}`;
           const updatedLabel = label.replace(/^<label\b/, `<label for="${setId}"`);
-          return `\t<div class="multi">\n\t\t${updatedLabel}\n\t\t<input type="text" id="${setId}" />\n\t</div>`;
+          return `\t<div class="opsv-multi">\n\t\t${updatedLabel}\n\t\t<input type="${inputType}" class="multi" id="${setId}" ${styleProp}/>\n\t</div>`;
         }
       })
       .join('\n');
@@ -161,7 +165,7 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
 
     const inputRows = Array.from({ length: rows }, (_, i) => i + 1);
     const inputTage = inputRows
-      .map((input) => `\t<input type="text" class="multi" id="${qnumber}x${input}" />`)
+      .map((input) => `\t<input type="${inputType}" class="opsv-multi multi" id="${qnumber}x${input}" ${styleProp}/>`)
       .join('\n');
 
     replaceHtml = `<div class="opsv-q-container" id="${qnumber}-inputs">\n${inputTage}\n</div>`;

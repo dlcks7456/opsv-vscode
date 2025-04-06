@@ -68,6 +68,12 @@
         "key": "ctrl+n",
         "when": "editorTextFocus && editorLangId == 'html'"
       }
+    ],
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./legacyCodes.code-snippets"
+      }
     ]
   },
   "scripts": {
