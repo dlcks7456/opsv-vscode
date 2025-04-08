@@ -1,0 +1,140 @@
+<!-- Create Input Text/Number example
+[문번호]-[input 수]
+> ctrl+t or ctrl+n 
+-->
+<div
+  class="opsv-q-container"
+  style="width: 100%; display: flex; flex-direction: column; gap: 10px; padding: 5px"
+  id="Q1-inputs"
+>
+  <div class="opsv-multi" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 7px">
+    <label for="Q1a1">label 1</label>
+    <input
+      type="text"
+      class="multi"
+      id="Q1a1"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 7px">
+    <label for="Q1a2">label 2</label>
+    <input
+      type="text"
+      class="multi"
+      id="Q1a2"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+</div>
+
+<!-- Create Input Text/Number with Label example
+[문번호] (줄바꿈으로 구분)
+속성 텍스트 1
+속성 텍스트 2
+1. 속성을 먼저 label로 변경 (ctrl+1 / ctrl+shift+1)
+2. 속성과 문번호를 모두 선택 후 ctrl+t/ctrl+n
+...
+> ctrl+t or ctrl+n -->
+
+<!-- label은 ctrl+1 (value가 없는 경우) -->
+<div class="opsv-q-container" id="Q1-inputs">
+  <div class="opsv-multi">
+    <label for="Q1a1">label 1</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q1a1"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi">
+    <label for="Q1a2">label 2</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q1a2"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi">
+    <label for="Q1a3">label 3</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q1a3"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi">
+    <label for="Q1a4">label 4</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q1a4"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi">
+    <label for="Q1a5">label 5</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q1a5"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+</div>
+
+<!-- value가 있는 label은 ctrl+shift+1 -->
+<div class="opsv-q-container" id="Q2-inputs">
+  <div class="opsv-multi">
+    <label for="Q2a101">label 1</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q2a101"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi">
+    <label for="Q2a201">label 2</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q2a201"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi">
+    <label for="Q2a3">label 3</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q2a3"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi">
+    <label for="Q2a4">label 4</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q2a4"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+  <div class="opsv-multi">
+    <label for="Q2a5">label 5</label>
+    <input
+      type="number"
+      class="multi"
+      id="Q2a5"
+      style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px"
+    />
+  </div>
+</div>
+
+<!-- create label은 중복 검사를 해줍니다. -->
+label 1 label 2 label 2 label 3 label 4
+
+<!-- 소소한 기능... ctrl+shift+c -->

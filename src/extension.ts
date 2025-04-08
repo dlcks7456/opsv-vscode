@@ -105,7 +105,7 @@ const executeCommand = async (includeCode: boolean, attrType: 'label' | 'option'
           if (match === null) {
             printPage += `<${attrType}>${line}</${attrType}> <!-- 매칭되지 않는 패턴 -->\n`;
           } else {
-            printPage += `<${attrType} for="x${match[0]}">${match[1]}</${attrType}>\n`;
+            printPage += `<${attrType} for="a${match[0]}">${match[1]}</${attrType}>\n`;
           }
         } else {
           printPage += `<${attrType}>${line}</${attrType}>\n`;
@@ -142,21 +142,21 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
     const labels = labelMatches
       ?.map((label, index) => {
         // for 속성 존재 여부 검사
-        const forMatch = label.match(/for\s*=\s*["']x(\d+)["']/);
+        const forMatch = label.match(/for\s*=\s*["']a(\d+)["']/);
         if (forMatch) {
           const forValue = forMatch[1];
-          const setId = `${qnumber}x${forValue}`;
+          const setId = `${qnumber}a${forValue}`;
           const updatedLabel = label.replace(/for\s*=\s*["'][^"']*["']/, `for="${setId}"`);
-          return `\t<div class="opsv-multi">\n\t\t${updatedLabel}\n\t\t<input type="${inputType}" class="multi" id="${setId}" ${styleProp}/>\n\t</div>`;
+          return `\t<div class="opsv-multi" style="display: flex;flex-direction: column;gap: 5px;margin-bottom: 7px;">\n\t\t${updatedLabel}\n\t\t<input type="${inputType}" class="multi" id="${setId}" ${styleProp}/>\n\t</div>`;
         } else {
-          const setId = `${qnumber}x${index + 1}`;
+          const setId = `${qnumber}a${index + 1}`;
           const updatedLabel = label.replace(/^<label\b/, `<label for="${setId}"`);
-          return `\t<div class="opsv-multi">\n\t\t${updatedLabel}\n\t\t<input type="${inputType}" class="multi" id="${setId}" ${styleProp}/>\n\t</div>`;
+          return `\t<div class="opsv-multi" style="display: flex;flex-direction: column;gap: 5px;margin-bottom: 7px;">\n\t\t${updatedLabel}\n\t\t<input type="${inputType}" class="multi" id="${setId}" ${styleProp}/>\n\t</div>`;
         }
       })
       .join('\n');
 
-    replaceHtml = `<div class="opsv-q-container" id="${qnumber}-inputs">\n${labels}\n</div>`;
+    replaceHtml = `<div class="opsv-q-container" style="width: 100%;display: flex;flex-direction: column;gap: 10px;padding: 5px;" id="${qnumber}-inputs">\n${labels}\n</div>`;
   } else {
     let rows = trimLine[1] ? Number(trimLine[1]) : 1;
     if (isNaN(rows)) {
@@ -165,10 +165,10 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
 
     const inputRows = Array.from({ length: rows }, (_, i) => i + 1);
     const inputTage = inputRows
-      .map((input) => `\t<input type="${inputType}" class="opsv-multi multi" id="${qnumber}x${input}" ${styleProp}/>`)
+      .map((input) => `\t<input type="${inputType}" class="opsv-multi multi" id="${qnumber}a${input}" ${styleProp}/>`)
       .join('\n');
 
-    replaceHtml = `<div class="opsv-q-container" id="${qnumber}-inputs">\n${inputTage}\n</div>`;
+    replaceHtml = `<div class="opsv-q-container" style="width: 100%;display: flex;flex-direction: column;gap: 10px;padding: 5px;" id="${qnumber}-inputs">\n${inputTage}\n</div>`;
   }
 
   return replaceHtml;

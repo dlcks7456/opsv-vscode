@@ -45,7 +45,7 @@
     "keybindings": [
       {
         "command": "opsv-snd-editor.copyForEditor",
-        "key": "ctrl+c",
+        "key": "ctrl+shift+c",
         "when": "editorTextFocus && editorLangId == 'html'"
       },
       {

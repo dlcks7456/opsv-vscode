@@ -126,5 +126,4 @@ function sameRotationOrder(setRotationBase, excludeNumbers = []) {
     throw error;
   }
 }
-
 /* ----------- rotationSameOrder --------------- */
