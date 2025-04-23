@@ -1,17 +1,12 @@
-/* ----------- ratingHandler --------------- */
-// 평가형 문항 일괄 처리
 // ratingHandler({ reverse: true, showValue: true});
-
-// 특정 문항 처리
 window.rating = (obj) => {
   return ratingHandler({ ...obj, qNum: cur });
 };
 
-function ratingHandler({ reverse = false, showValue = false, qNum = null }) {
+function ratingHandler({ reverse = false, showValue = false, qNum = null, format = null }) {
   try {
     const surveyForm = document.querySelector('#survey_form');
     let ratings = [];
-    // 평가형 문항만 필터링
     if (qNum === null) {
       const allQuestions = surveyForm.querySelectorAll('.survey');
       ratings = [...allQuestions].filter((question) => [5, 9].includes(Number(question.querySelector('#type').value)));
@@ -32,7 +27,6 @@ function ratingHandler({ reverse = false, showValue = false, qNum = null }) {
       let ratingCSS = '';
       let tableCellCSS = '';
 
-      // 일반 평가형
       if (ratingType === 5) {
         tableCellCSS += `
         td {
@@ -77,19 +71,23 @@ function ratingHandler({ reverse = false, showValue = false, qNum = null }) {
                 color: #2b2a2a;
                 pointer-events: none;
                 font-weight: bold;
+                width: 100%;
+                text-align: center;
             }`;
 
           cells.forEach((cell) => {
             const cellValue = Number(cell.querySelector('input').value);
             const valueLabel = document.createElement('div');
             valueLabel.classList.add('cell-value');
-            valueLabel.textContent = `[${cellValue}]`;
+            valueLabel.textContent = `[${cellValue}점]`;
+            if (format !== null) {
+              valueLabel.textContent = format.replace('%d', cellValue);
+            }
             cell.appendChild(valueLabel);
           });
         }
       }
 
-      // 객관식 단일 평가형
       if (ratingType === 9) {
         ratingCSS += `
   #${rating.id} .answer .answer-wrapper {
@@ -109,5 +107,3 @@ function ratingHandler({ reverse = false, showValue = false, qNum = null }) {
     return true;
   }
 }
-
-/* ----------- ratingHandler --------------- */

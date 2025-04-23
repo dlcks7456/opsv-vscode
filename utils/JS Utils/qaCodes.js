@@ -1,6 +1,5 @@
-/* ----------- qaMode --------------- */
 // force를 true로 하면 오베이 앱에서 확인 가능
-qaMode({ defaultMode: true, force: false });
+qaMode({ defaultMode: true });
 
 function qaMode({ defaultMode = true, force = false }) {
   const surveyForm = document.querySelector('#survey_form');
@@ -10,7 +9,6 @@ function qaMode({ defaultMode = true, force = false }) {
     return;
   }
 
-  // wrapping goNext function
   function qaGoNext(fn) {
     return function (...args) {
       const result = fn.apply(this, args);
@@ -41,7 +39,6 @@ function qaMode({ defaultMode = true, force = false }) {
   const ceTypes = [1, 2, 3, 5, 6, 9];
 
   if (!force) {
-    // Create MutationObserver to watch for class changes
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.attributeName === 'class' && surveyForm.classList.contains('preview-caution')) {
@@ -53,19 +50,16 @@ function qaMode({ defaultMode = true, force = false }) {
       }
     });
 
-    // 5초 후에 observer disconnect
     setTimeout(() => {
       observer.disconnect();
       console.log('QA Mode observer disconnected after 5 seconds');
     }, 5000);
 
-    // Start observing with timeout
     observer.observe(surveyForm, { attributes: true });
   } else {
     initQAMode();
   }
 
-  // QA 모드 여부 확인
   const checkQAMode = () => {
     const surveyForm = document.querySelector('#survey_form');
     return surveyForm.classList.contains('qa-mode');
@@ -73,7 +67,6 @@ function qaMode({ defaultMode = true, force = false }) {
 
   window.checkQAMode = checkQAMode;
 
-  // QA 모드의 로직 summary에 추가
   const updateQASummary = (targetQid, updateText) => {
     try {
       const qaMode = document.querySelector(`#survey${targetQid} .qa-container`);
@@ -84,7 +77,6 @@ function qaMode({ defaultMode = true, force = false }) {
         summaryParts = summaryParts.map((part) => part.trim());
         summaryParts.push(updateText);
 
-        // Remove duplicates while preserving order
         const uniqueSummaryParts = summaryParts.filter((item, index) => summaryParts.indexOf(item) === index);
         qaSummary.textContent = uniqueSummaryParts.join(' / ');
       }
@@ -105,18 +97,14 @@ function qaMode({ defaultMode = true, force = false }) {
         throw new Error('No survey questions found');
       }
 
-      // Create QA dialog
       const qaDialog = createQADialog();
       surveyForm.appendChild(qaDialog);
 
-      // Process all questions
       processQuestions(allQuestions, qaDialog);
 
-      // Add CSS
       addQAStyles(surveyForm);
 
-      // Initial setup
-      setJump(); // TBD
+      setJump();
     } catch (err) {
       console.error('QA Mode initialization failed:', err.message);
     }
@@ -126,7 +114,6 @@ function qaMode({ defaultMode = true, force = false }) {
     const qaDialog = document.createElement('dialog');
     qaDialog.classList.add('qa-dialog');
 
-    // Create dialog header
     const qaDialogHeader = document.createElement('div');
     qaDialogHeader.classList.add('qa-dialog-header');
     qaDialog.appendChild(qaDialogHeader);
@@ -142,12 +129,10 @@ function qaMode({ defaultMode = true, force = false }) {
     qaDialogClose.addEventListener('click', () => qaDialog.close());
     qaDialogHeader.appendChild(qaDialogClose);
 
-    // Create dialog content
     const qaDialogContent = document.createElement('div');
     qaDialogContent.classList.add('qa-dialog-content');
     qaDialog.appendChild(qaDialogContent);
 
-    // Add click handler to close when clicking outside
     qaDialog.addEventListener('click', (e) => {
       const dialogDimensions = qaDialog.getBoundingClientRect();
       if (
@@ -160,7 +145,6 @@ function qaMode({ defaultMode = true, force = false }) {
       }
     });
 
-    // Add toggle button
     try {
       const toggleContainer = document.createElement('div');
       toggleContainer.classList.add('qa-mode-toggle-container');
@@ -241,20 +225,16 @@ function qaMode({ defaultMode = true, force = false }) {
           throw new Error(`Question body not found for Q${qNumber}`);
         }
 
-        // Create QA container
         const qaContainer = document.createElement('div');
         qaContainer.classList.add('qa-container');
 
-        // Add question name
         const questionName = document.createElement('div');
         questionName.classList.add('question-name');
         questionName.textContent = `Q${qNumber}`;
         qaContainer.appendChild(questionName);
 
-        // Logic Check
         let otherQA = [];
 
-        // get id nextq
         const nextq = surveyForm.querySelector(`#survey${cur} input#nextq`);
         if (nextq) {
           const nextqNumber = Number(nextq.value);
@@ -268,7 +248,6 @@ function qaMode({ defaultMode = true, force = false }) {
           }
         }
 
-        // Check for piping
         const pipingTypeElement = question.querySelector('#pipingType');
         if (pipingTypeElement) {
           const pipingType = Number(pipingTypeElement.value);
@@ -286,11 +265,9 @@ function qaMode({ defaultMode = true, force = false }) {
           }
         }
 
-        // Add attributes QA
         const typeElement = question.querySelector('#type');
         if (typeElement) {
           const questionType = Number(typeElement.value);
-          // radio, checkbox, columnRating, rank
           if ([1, 2, 9, 6].includes(questionType)) {
             const attributes = question.querySelectorAll('.answer-choice-wrapper');
             if (attributes && attributes.length > 0) {
@@ -316,7 +293,6 @@ function qaMode({ defaultMode = true, force = false }) {
             }
           }
 
-          // rating and less than score 9
           if (questionType === 5) {
             const cells = question.querySelectorAll('.answer table tbody tr:first-child td');
             const score = cells.length;
@@ -333,7 +309,6 @@ function qaMode({ defaultMode = true, force = false }) {
           }
         }
 
-        // Add click handler to question title
         const questionSurveyTitle = question.querySelector('.question-survey-title');
         if (questionSurveyTitle) {
           questionSurveyTitle.addEventListener('click', () => {
@@ -341,7 +316,6 @@ function qaMode({ defaultMode = true, force = false }) {
           });
         }
 
-        // Add QA summary
         const qaSummary = otherQA.join(' / ');
         const qaText = document.createElement('div');
         qaText.classList.add('qa-summary');
@@ -354,7 +328,6 @@ function qaMode({ defaultMode = true, force = false }) {
       }
     });
 
-    // fail goto question
     const caseBlocks = getEntryCheckString();
     Object.entries(caseBlocks).forEach(([qnum, cond]) => {
       const match = cond.match(/getNextQuestionRank\((\d+)\)/);
@@ -391,8 +364,11 @@ function qaMode({ defaultMode = true, force = false }) {
     top: 50%;
     font-size: 0.7rem;
     color: #7b7b7b;
-    font-style: italic;
     pointer-events: none;
+    background: white;
+    padding: 3px;
+    border-radius: 10px;
+    opacity: 0.7;
   }
 
   .qa-option-button {
@@ -714,21 +690,17 @@ function qaMode({ defaultMode = true, force = false }) {
     const jumpContainer = document.createElement('div');
     jumpContainer.classList.add('jump-container');
 
-    // Create custom dropdown
     const selectWrapper = document.createElement('div');
     selectWrapper.classList.add('jump-select-wrapper');
 
-    // Create search input
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.classList.add('jump-search');
     searchInput.placeholder = 'Question Jump';
 
-    // Create dropdown container
     const dropdown = document.createElement('div');
     dropdown.classList.add('jump-dropdown');
 
-    // Add options to dropdown
     questions.forEach((question) => {
       const option = document.createElement('div');
       option.classList.add('jump-option', `qa-survey${question.qNumber}`);
@@ -741,7 +713,6 @@ function qaMode({ defaultMode = true, force = false }) {
       option.setAttribute('data-qNumber', question.qNumber);
       dropdown.appendChild(option);
 
-      // Add click event to option
       option.addEventListener('click', () => {
         handleQuestionSelection(question.qNumber, option.textContent);
         dropdown.classList.remove('active');
@@ -749,7 +720,6 @@ function qaMode({ defaultMode = true, force = false }) {
       });
     });
 
-    // Add search functionality
     searchInput.addEventListener('focus', () => {
       dropdown.classList.add('active');
     });
@@ -768,7 +738,6 @@ function qaMode({ defaultMode = true, force = false }) {
         }
       });
 
-      // Handle arrow down key to focus first visible option
       if (e.key === 'ArrowDown') {
         const firstVisibleOption = [...dropdown.querySelectorAll('.jump-option')].find(
           (opt) => !opt.classList.contains('hidden')
@@ -778,7 +747,6 @@ function qaMode({ defaultMode = true, force = false }) {
         }
       }
 
-      // Skip if Enter key is pressed
       if (e.key === 'Enter') {
         const visibleOption = [...dropdown.querySelectorAll('.jump-option')].filter(
           (opt) => !opt.classList.contains('hidden')
@@ -790,7 +758,7 @@ function qaMode({ defaultMode = true, force = false }) {
 
       if (e.key === 'Escape') {
         dropdown.classList.remove('active');
-        searchInput.blur(); // Add blur() to remove focus
+        searchInput.blur();
         searchInput.value = '';
         return;
       }
@@ -829,10 +797,8 @@ function qaMode({ defaultMode = true, force = false }) {
         visibleOptions[currentIndex].click();
       }
 
-      // 화살표 키와 Enter 키가 아닌 다른 키가 눌리면 searchInput으로 포커스 이동
       if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) {
         searchInput.focus();
-        // 커서를 input의 가장 끝으로 이동
         const length = searchInput.value.length;
         searchInput.setSelectionRange(length, length);
       }
@@ -850,15 +816,11 @@ function qaMode({ defaultMode = true, force = false }) {
       });
     };
 
-    // Submit form
     const showCurrentAnswer = () => {
-      // form 데이터 읽기
       const formData = new FormData(surveyForm);
 
-      // 폼 데이터를 출력해보기
       const answers = {};
       formData.forEach((value, key) => {
-        // 정규식으로 key의 대괄호 안의 숫자 추출
         const qNumber = key.match(/answer\[(\d+)\]/)?.[1] || undefined;
         if (qNumber === undefined) {
           return;
@@ -867,10 +829,6 @@ function qaMode({ defaultMode = true, force = false }) {
         if (value.trim() === '') {
           return;
         }
-
-        const qname = `survey${qNumber}`;
-        const question = surveyForm.querySelector(`#${qname}`);
-        // const qType = Number(question.querySelector('#type').value);
 
         if (answers[qNumber]) {
           let currentAnswers = answers[qNumber];
@@ -895,7 +853,6 @@ function qaMode({ defaultMode = true, force = false }) {
         let showAnswer = `> ${answerArrays.join(', ')}`;
 
         if (qType === 6) {
-          // rank
           const rankNumberAnswer = [];
           const rankTextAnswer = [];
           value.forEach((v) => {
@@ -924,7 +881,6 @@ function qaMode({ defaultMode = true, force = false }) {
       });
     };
 
-    // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
       if (!selectWrapper.contains(e.target)) {
         dropdown.classList.remove('active');
@@ -939,7 +895,6 @@ function qaMode({ defaultMode = true, force = false }) {
       showOptions();
     });
 
-    // Append elements
     selectWrapper.appendChild(searchInput);
     selectWrapper.appendChild(dropdown);
     jumpContainer.appendChild(selectWrapper);
@@ -1007,7 +962,6 @@ function qaMode({ defaultMode = true, force = false }) {
       for (let i = 0; i < code.length; i++) {
         const char = code[i];
 
-        // 문자열 처리
         if (inString) {
           current += char;
           if (char === stringChar && prevChar !== '\\') inString = false;
@@ -1016,15 +970,13 @@ function qaMode({ defaultMode = true, force = false }) {
           inString = true;
           stringChar = char;
         } else {
-          // 괄호 깊이 계산 (문자열 안이 아닐 때만)
           '({['.includes(char) && depth++; //]})({[
           ']})'.includes(char) && depth--;
 
-          // && 연산자 분리 (깊이가 0일 때만)
           if (char === '&' && i + 1 < code.length && code[i + 1] === '&' && depth === 0) {
             parts.push(current.trim());
             current = '';
-            i++; // 다음 '&' 건너뛰기
+            i++;
           } else {
             current += char;
           }
@@ -1042,24 +994,21 @@ function qaMode({ defaultMode = true, force = false }) {
 
     if (ifIndex === -1) return null;
 
-    // 'if' 다음에 오는 첫 여는 괄호 찾기
     const start = code.indexOf('(', ifIndex);
     if (start === -1) return null;
 
     let openParens = 1;
     let i = start + 1;
 
-    // 여는 괄호와 닫는 괄호 수를 세서 조건문 전체 추출
     while (i < code.length && openParens > 0) {
       if (code[i] === '(') openParens++;
       else if (code[i] === ')') openParens--;
       i++;
     }
 
-    if (openParens !== 0) return null; // 괄호 불일치
+    if (openParens !== 0) return null;
 
-    // 조건문 추출 (start+1부터 i-1까지)
     return code.slice(start + 1, i - 1).trim();
   } /* ) */
 }
-/* ----------- qaMode 실사 전 삭제 --------------- */
+/* 실사 전 삭제 */

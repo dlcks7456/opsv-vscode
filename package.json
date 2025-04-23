@@ -4,7 +4,7 @@
   "description": "Opensurvey Editor Snippets and shourtCuts",
   "publisher": "Opensurvey-Chuck",
   "icon": "images/icon.png",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/dlcks7456/opsv-vscode.git"
@@ -73,6 +73,10 @@
       {
         "language": "javascript",
         "path": "./legacyCodes.code-snippets"
+      },
+      {
+        "language": "javascript",
+        "path": "./rebuildCodes.code-snippets"
       }
     ]
   },

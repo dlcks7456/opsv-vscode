@@ -1,0 +1,51 @@
+<goal>Bold the text to be emphasized</goal>
+<instructions>
+- Sentences are primarily used in survey questionnaires
+- Can handle all languages
+- Maintain the original text
+- Find appropriate phrases to bold
+- Avoid bolding entire sentences
+- Skip detailed explanations
+- Return in HTML code block format
+- Use strong tags for bolding
+- Highlight the core phrase of the question
+- Highlight the negative phrase in the question with the negative color
+- Use the default color for other phrases
+- Highlight is written with the span tag, and the color is written as style="background-color: [color];"
+- Words with meanings such as 'all', 'only 1', 'n items in order' should only be bolded without highlighting.
+<important>Highlighted phrases should not be too long as they don't look good. Try to highlight only the most important parts of the sentence briefly.</important>
+    <highlightColor>
+        <default>#c2f1ff</default>
+        <negative>#ffe0eb</negative>
+    </highlightColor>
+</instructions>
+<example1>
+    <if>If there is a negative meaning</if>
+    <then>
+        <input>귀하께서 드셨을 때 소화가 안 된다고 느꼈던 제품군을 모두 선택 해 주시기 바랍니다.</input>
+        <output>
+```html
+귀하께서 드셨을 때 <strong><span style="background-color: #ffe0eb;">소화가 안 된다고 느꼈던 제품군</span></strong>을 <strong>모두</strong> 선택 해 주시기 바랍니다.
+```
+</output>
+    </then>
+    <else>
+        <input>위에서 선택하신 제품을 구입하고 싶다고 선택한 이유가 무엇입니까?</input>
+        <output>
+```html        
+위에서 선택하신 제품을 <strong>구입하고 싶다고</strong> <strong><span style="background-color: #c2f1ff;">선택한 이유</span></strong>가 무엇입니까?
+```
+        </output>
+    </else>
+</example1>
+<example2>
+    <if>When it's Japanese</if>
+    <then>
+        <input>こちらの商品を最も買いたくないとご回答された理由を詳しく教えてください</input>
+        <output>
+```html
+こちらの商品を<strong>最も買いたくない</strong>とご回答された<strong>理由</strong>を詳しく教えてください
+```    
+        </output>
+    </then>
+</example2>

@@ -1,53 +1,42 @@
-/* ----------- shuffleBy --------------- */
-function shuffleBy(baseQid, targetQid = null) {
-  const params = { baseQid, targetQid };
+window.shuffleBy = (baseQid, qnum = null) => {
+  const params = { baseQid, qnum };
   for (const [key, value] of Object.entries(params)) {
-    if (value === null && key === 'targetQid') continue;
+    if (value === null && key === 'qnum') continue;
     if (typeof value !== 'number') {
       throw new Error(`Please set \`${key}\` as a number`);
     }
   }
 
-  if (targetQid === null) {
-    targetQid = cur;
+  if (qnum === null) {
+    qnum = cur;
   }
 
   try {
-    const isDiffAnswer = (answer) => {
-      return !answer.querySelector('.answer-etc') && answer.querySelector('input[id^="rank"]').value !== '-1';
-    };
-
     const answerWrappers = '.answer-wrapper .answer-choice-wrapper';
     const baseQuestion = `#survey${baseQid} ${answerWrappers}`;
-    const targetQuestion = `#survey${targetQid} ${answerWrappers}`;
+    const targetQuestion = `#survey${qnum} ${answerWrappers}`;
 
-    const answerWrapper = document.querySelector(`#survey${targetQid} .answer-wrapper`);
-    if (!answerWrapper) throw new Error('답변 컨테이너를 찾을 수 없습니다.');
+    const answerWrapper = document.querySelector(`#survey${qnum} .answer-wrapper`);
 
     const baseQuestionAnswers = document.querySelectorAll(baseQuestion);
-    if (!baseQuestionAnswers.length) throw new Error('기본 질문의 답변들을 찾을 수 없습니다.');
-
-    const filteredAnswers = [...baseQuestionAnswers].filter(isDiffAnswer);
-    const answerOrderValues = filteredAnswers.map((ans) => ans.querySelector('input[id^="rank"]').value);
+    const answerOrderValues = [...baseQuestionAnswers].map((ans) => ans.querySelector('input[id^="rank"]').value);
 
     const targetQuestionAnswers = document.querySelectorAll(targetQuestion);
-    if (!targetQuestionAnswers.length) throw new Error('현재 질문의 답변들을 찾을 수 없습니다.');
-
-    const targetAnswersArray = [...targetQuestionAnswers];
-    const etcAnswers = targetAnswersArray.filter((ans) => !isDiffAnswer(ans)).map((ans) => ans.cloneNode(true));
-
-    const targetAnswers = targetAnswersArray.filter(isDiffAnswer).map((ans) => ans.cloneNode(true));
+    const targetAnswers = [...targetQuestionAnswers];
     const targetAnswerValues = targetAnswers.map((ans) => ans.querySelector('input[id^="rank"]').value);
 
-    const remainAnswers = targetAnswerValues.filter((value) => !answerOrderValues.includes(value));
+    const remainAnswers = targetAnswerValues.filter((value) => !answerOrderValues.includes(value) && value !== '-1');
     if (remainAnswers.length > 0) {
       throw new Error(`There are mismatched answers. : ${remainAnswers}`);
     }
 
     try {
-      answerWrapper.innerHTML = '';
+      const tempContainer = document.createDocumentFragment();
 
-      // 중요한 답변 순서 조정 로직은 try-catch 유지
+      while (answerWrapper.firstChild) {
+        tempContainer.appendChild(answerWrapper.firstChild);
+      }
+
       answerOrderValues.forEach((rank) => {
         try {
           const matchingAnswer = targetAnswers.find(
@@ -62,11 +51,12 @@ function shuffleBy(baseQid, targetQid = null) {
         }
       });
 
-      etcAnswers.forEach((ans) => answerWrapper.appendChild(ans));
+      while (tempContainer.firstChild) {
+        answerWrapper.appendChild(tempContainer.firstChild);
+      }
 
-      // QA Mode
       if (typeof updateQASummary === 'function') {
-        updateQASummary(targetQid, `shb: Q${baseQid}`);
+        updateQASummary(qnum, `shb: Q${baseQid}`);
       }
     } catch (error) {
       console.error('Error relocating answers:', error);
@@ -78,8 +68,4 @@ function shuffleBy(baseQid, targetQid = null) {
   } finally {
     return true;
   }
-}
-
-window.shuffleBy = shuffleBy;
-
-/* ----------- shuffleBy --------------- */
+};

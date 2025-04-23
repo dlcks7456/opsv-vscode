@@ -165,7 +165,7 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
 
     const inputRows = Array.from({ length: rows }, (_, i) => i + 1);
     const inputTage = inputRows
-      .map((input) => `\t<input type="${inputType}" class="opsv-multi multi" id="${qnumber}a${input}" ${styleProp}/>`)
+      .map((input) => `\t<input type="${inputType}" class="opsv-multi multi" id="${qnumber}x${input}" ${styleProp}/>`)
       .join('\n');
 
     replaceHtml = `<div class="opsv-q-container" style="width: 100%;display: flex;flex-direction: column;gap: 10px;padding: 5px;" id="${qnumber}-inputs">\n${inputTage}\n</div>`;
@@ -233,7 +233,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(createInputNumbers);
 
-  // ctrl+c : 복사 했을 때 line join, trim()을 한 뒤에 복사
+  // ctrl+shift+c : 복사 했을 때 line join, trim()을 한 뒤에 복사
   const copyForEditor = vscode.commands.registerCommand('opsv-snd-editor.copyForEditor', async () => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -254,7 +254,7 @@ export function activate(context: vscode.ExtensionContext) {
     const processed = text
       .split('\n')
       .map((line) => line.trim())
-      .join('');
+      .join(' ');
 
     // 클립보드에 복사
     await vscode.env.clipboard.writeText(processed);

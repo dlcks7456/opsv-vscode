@@ -1,0 +1,90 @@
+{
+  "dataspringRedirect": {
+    "prefix": "dataspring",
+    "scope": "js",
+    "body": [
+      "(() => {",
+      "    let quotaFlag = \\$('#quotaFlag').val();",
+      "    // DataSpring: ACCESS_KEY",
+      "    const accessKey = '${1:엑세스 키}';",
+      "    const grpid = '${2:국가 코드}';",
+      "    const redirectUrl = {",
+      "        1: {url: `https://survey1.datadata.co.kr/?ACCESS_KEY=\\${accessKey}&grpid=\\${grpid}&Q=STID&UID=\\${EID}&status=scrout`, status: 'screenout'},",
+      "        2: {url: `https://survey1.datadata.co.kr/?ACCESS_KEY=\\${accessKey}&grpid=\\${grpid}&Q=STID&UID=\\${EID}&status=comp`, status: 'complete'},",
+      "        3: {url: `https://survey1.datadata.co.kr/?ACCESS_KEY=\\${accessKey}&grpid=\\${grpid}&Q=STID&UID=\\${EID}&status=quotafull`, status: 'quotafull'},",
+      "    };",
+      "",
+      "    const redirect = redirectUrl[quotaFlag];",
+      "    \\$('#redirectUrl').val(redirect.url);",
+      "    console.log(redirect.status, \\$('#redirectUrl').val());",
+      "    setAnswer(1, ValueType.TEXT, quotaFlag, true);",
+      "})()"
+    ],
+    "description": "데이터스프링 리다이렉트 링크"
+  },
+  "dynataRedirect": {
+    "prefix": "dynata",
+    "scope": "js",
+    "body": [
+      "(() => {",
+      "    let quotaFlag = \\$('#quotaFlag').val();",
+      "    // Dynata",
+      "    const redirectUrl = {",
+      "        1: {url: `https://dkr1.ssisurveys.com/projects/end?rst=2&psid=\\${EID}`, status: 'screenout'},",
+      "        2: {url: `https://dkr1.ssisurveys.com/projects/end?rst=1&psid=\\${EID}`, status: 'complete'},",
+      "        3: {url: `https://dkr1.ssisurveys.com/projects/end?rst=3&psid=\\${EID}`, status: 'quotafull'},",
+      "    };",
+      "",
+      "    const redirect = redirectUrl[quotaFlag];",
+      "    \\$('#redirectUrl').val(redirect.url);",
+      "    console.log(redirect.status, \\$('#redirectUrl').val());",
+      "    setAnswer(1, ValueType.TEXT, quotaFlag, true);",
+      "})()"
+    ],
+    "description": "다이나타 리다이렉트 링크"
+  },
+  "purespectrumRedirect": {
+    "prefix": "purespectrum",
+    "scope": "js",
+    "body": [
+      "(() => {",
+      "    let quotaFlag = \\$('#quotaFlag').val();",
+      "    // PureSpectrum: ps_hash",
+      "    const psHash = '${1:ps_hash}';",
+      "    const redirectUrl = {",
+      "        1: {url: `https://spectrumsurveys.com/surveydone?st=18&transaction_id=\\${EID}&ps_hash=\\${psHash}`, status: 'screenout'},",
+      "        2: {url: `https://spectrumsurveys.com/surveydone?st=21&transaction_id=\\${EID}&ps_hash=\\${psHash}`, status: 'complete'},",
+      "        3: {url: `https://spectrumsurveys.com/surveydone?st=17&transaction_id=\\${EID}&ps_hash=\\${psHash}`, status: 'quotafull'},",
+      "    };",
+      "",
+      "    const redirect = redirectUrl[quotaFlag];",
+      "    \\$('#redirectUrl').val(redirect.url);",
+      "    console.log(redirect.status, \\$('#redirectUrl').val());",
+      "    setAnswer(1, ValueType.TEXT, quotaFlag, true);",
+      "})()"
+    ],
+    "description": "퓨어스펙트럼 리다이렉트 링크"
+  },
+  "tolunaRedirect": {
+    "prefix": "toluna",
+    "scope": "js",
+    "body": [
+      "(() => {",
+      "    let quotaFlag = \\$('#quotaFlag').val();",
+      "    // Toluna: sname",
+      "    const sname = '${1:sname}';",
+      "    const redirectUrl = {",
+      "        1: {url: `https://ups.surveyrouter.com/TrafficUI/MSCUI/SOTerminated.aspx?sname=\\${sname}&gid=\\${EID}`, status: 'screenout'},",
+      "        2: {url: `https://ups.surveyrouter.com/TrafficUI/MSCUI/SOQualified.aspx?sname=\\${sname}&gid=\\${EID}`, status: 'complete'},",
+      "        3: {url: `https://ups.surveyrouter.com/TrafficUI/MSCUI/SOQuotafull.aspx?sname=\\${sname}&gid=\\${EID}`, status: 'quotafull'},",
+      "    };",
+      "",
+      "    const redirect = redirectUrl[quotaFlag];",
+      "    \\$('#redirectUrl').val(redirect.url);",
+      "    console.log(redirect.status, \\$('#redirectUrl').val());",
+      "    setAnswer(1, ValueType.TEXT, quotaFlag, true);",
+      "})()"
+    ],
+    "description": "톨루나 리다이렉트 링크"
+  }
+}
