@@ -1,7 +1,7 @@
 /* ----------- Question Class --------------- */
 const values = (qNum) => {
   if (qNum === null) {
-    throw new Error('qNum is required');
+    qNum = cur;
   }
 
   const question = document.querySelector(`#survey${qNum}`);
@@ -529,6 +529,44 @@ class SetQuestion {
     }
   }
 
+  setVal(value) {
+    if ([1, 2, 6, 9].includes(this.type)) {
+      // 단수/복수/순위형/객관식 평가형
+      const setValues = !Array.isArray(value) ? [value] : value;
+      if (!setValues.every((v) => typeof v === 'number')) {
+        throw new Error('value must be a number');
+      }
+      const answerElements = setValues.map((v) => {
+        const wrapper = this.node.querySelector(`#answer${this.qNum}-${v}`).parentNode;
+        const desc = wrapper.querySelector('.answer-label').textContent;
+        return new AnswerElement(ValueType.OPTION, new Option(v, desc));
+      });
+
+      const answer = new AnswerList(answerElements, 0);
+      setAnswerList(answer, this.qNum);
+    }
+
+    if ([3, 5].includes(this.type)) {
+      // 숫자/평가형
+      if (!typeof value === 'number') {
+        throw new Error('value must be a number');
+      }
+      const answer = new AnswerList([new AnswerElement(ValueType.NUMBER, value)], 0);
+      setAnswerList(answer, this.qNum);
+    }
+
+    if ([4].includes(this.type)) {
+      // 문자
+      if (!typeof value === 'string') {
+        throw new Error('value must be a string');
+      }
+      const answer = new AnswerList([new AnswerElement(ValueType.TEXT, value)], 0);
+      setAnswerList(answer, this.qNum);
+    }
+
+    return this;
+  }
+
   get answer() {
     if (this.#isOtherSurvey()) {
       return this.origin
@@ -539,7 +577,7 @@ class SetQuestion {
     const answerList = this.origin.answers.map((ans) => {
       const value = ans.value;
       const type = ans.type;
-      if (type === 'text') {
+      if (type === 'text' || type === 'number') {
         return value;
       } else {
         const description = value.description;
