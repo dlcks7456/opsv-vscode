@@ -99,16 +99,24 @@ const executeCommand = async (includeCode: boolean, attrType: 'label' | 'option'
       const lines = processText(text);
 
       let printPage = '';
-      lines.forEach((line) => {
+      lines.forEach((line, index) => {
         if (includeCode) {
           const match = parseLine(line);
           if (match === null) {
             printPage += `<${attrType}>${line}</${attrType}> <!-- 매칭되지 않는 패턴 -->\n`;
           } else {
-            printPage += `<${attrType} for="a${match[0]}">${match[1]}</${attrType}>\n`;
+            if (attrType === 'label') {
+              printPage += `<${attrType} for="x${match[0]}">${match[1]}</${attrType}>\n`;
+            } else {
+              printPage += `<${attrType} value="${match[0]}">${match[1]}</${attrType}>\n`;
+            }
           }
         } else {
-          printPage += `<${attrType}>${line}</${attrType}>\n`;
+          if (attrType === 'label') {
+            printPage += `<${attrType}>${line}</${attrType}>\n`;
+          } else {
+            printPage += `<${attrType} value="${index + 1}">${line}</${attrType}>\n`;
+          }
         }
       });
 
@@ -130,10 +138,15 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
   const splitSelections = base.split('\n');
   const qidLine = splitSelections[0];
   const trimLine = qidLine.split('-').map((txt) => txt.trim());
-  const qnumber = trimLine[0];
+
+  let qnumber = '';
+  if (trimLine.length === 2) {
+    qnumber = trimLine[0];
+  }
 
   /* 나중에 삭제될 항목들 */
-  const styleProp = `style="border: 1px solid #ccc; height: 25px; width: 100%; max-width: 200px;"`;
+  const maxWidth = inputType === 'text' ? '200px' : '70px';
+  const styleProp = `style="border: 1px solid #ccc; border-radius: 7px; height: 25px; width: 100%; max-width: ${maxWidth};"`;
   /* ----------------- */
 
   let replaceHtml = '';
@@ -145,31 +158,90 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
         const forMatch = label.match(/for\s*=\s*["']a(\d+)["']/);
         if (forMatch) {
           const forValue = forMatch[1];
-          const setId = `${qnumber}a${forValue}`;
+          const setId = `${qnumber}x${forValue}`;
           const updatedLabel = label.replace(/for\s*=\s*["'][^"']*["']/, `for="${setId}"`);
-          return `\t<div class="opsv-multi" style="display: flex;flex-direction: column;gap: 5px;margin-bottom: 7px;">\n\t\t${updatedLabel}\n\t\t<input type="${inputType}" class="multi" id="${setId}" ${styleProp}/>\n\t</div>`;
+          return `\t<div class="multi multi-${forValue}" style="display: flex;flex-direction: column;gap: 5px;margin-bottom: 7px;">\n\t\t${updatedLabel}\n\t\t<div style="display: flex; gap:5px; align-items: center;">\n\t\t\t<input type="${inputType}" id="${setId}" ${styleProp}/>\n\t\t</div>\n\t</div>`;
         } else {
-          const setId = `${qnumber}a${index + 1}`;
+          const code = index + 1;
+          const setId = `${qnumber}x${code}`;
           const updatedLabel = label.replace(/^<label\b/, `<label for="${setId}"`);
-          return `\t<div class="opsv-multi" style="display: flex;flex-direction: column;gap: 5px;margin-bottom: 7px;">\n\t\t${updatedLabel}\n\t\t<input type="${inputType}" class="multi" id="${setId}" ${styleProp}/>\n\t</div>`;
+          return `\t<div class="multi multi-${code}" style="display: flex;flex-direction: column;gap: 5px;margin-bottom: 7px;">\n\t\t${updatedLabel}\n\t\t<div style="display: flex; gap:5px; align-items: center;">\n\t\t\t<input type="${inputType}" id="${setId}" ${styleProp}/>\n\t\t</div>\n\t</div>`;
         }
       })
       .join('\n');
 
-    replaceHtml = `<div class="opsv-q-container" style="width: 100%;display: flex;flex-direction: column;gap: 10px;padding: 5px;" id="${qnumber}-inputs">\n${labels}\n</div>`;
+    replaceHtml = `<div class="multi-container" style="width: 100%;display: flex;flex-direction: column;gap: 10px;padding: 5px;">\n${labels}\n</div>`;
   } else {
-    let rows = trimLine[1] ? Number(trimLine[1]) : 1;
+    let rows = Number(trimLine[0]);
+
+    if (trimLine.length === 2) {
+      rows = Number(trimLine[1]);
+    }
+
     if (isNaN(rows)) {
       rows = 1;
     }
 
     const inputRows = Array.from({ length: rows }, (_, i) => i + 1);
     const inputTage = inputRows
-      .map((input) => `\t<input type="${inputType}" class="opsv-multi multi" id="${qnumber}x${input}" ${styleProp}/>`)
+      .map(
+        (input) =>
+          `\t<div class="multi multi-${input}">\n\t\t<div style="display: flex; gap:5px; align-items: center;">\n\t\t\t<input type="${inputType}" id="${qnumber}x${input}" ${styleProp}/>\n\t\t</div>\n\t</div>`
+      )
       .join('\n');
 
-    replaceHtml = `<div class="opsv-q-container" style="width: 100%;display: flex;flex-direction: column;gap: 10px;padding: 5px;" id="${qnumber}-inputs">\n${inputTage}\n</div>`;
+    replaceHtml = `<div class="multi-container" style="width: 100%;display: flex;flex-direction: column;gap: 10px;padding: 5px;">\n${inputTage}\n</div>`;
   }
+
+  return replaceHtml;
+};
+
+const createSelect = (base: string) => {
+  const hasOptions = /<option\b[^>]*>/i.test(base);
+  let replaceHtml = '';
+
+  if (hasOptions) {
+    const options = base.match(/<option\b[^>]*>(.*?)<\/option>/gs) || [];
+
+    // 1. option 태그를 제외한 나머지 텍스트 추출
+    let remainingText = base;
+    options.forEach((option) => {
+      remainingText = remainingText.replace(option, '');
+    });
+
+    // 2. 나머지 텍스트가 있는 경우 배열로 분리
+    const textArray = remainingText.trim() !== '' ? remainingText.trim().split('\n') : [];
+    const defaultOption = `<option value=''>하나 선택...</option>`;
+
+    // 3 & 4. 배열 기반으로 select 태그 생성 및 option 삽입
+    if (textArray.length > 0) {
+      replaceHtml = textArray
+        .map((text, index) => {
+          const code = index + 1;
+          const id = `x${code}`;
+          return `\t<div class="multi multi-${code}" style="display:flex; flex-direction: column; gap: 5px;">
+\t\t<label for="${id}">${text.trim()}</label>
+\t\t<div style="display: flex; gap: 10px; align-items: center;">
+\t\t\t<select id="${id}" style="width: 100%;min-height: 30px;border: 1px solid #ccc;border-radius: 7px;">
+\t\t\t\t${defaultOption}
+\t\t\t\t${options.join('\n\t\t\t\t')}
+\t\t\t</select>
+\t\t</div>
+\t</div>`;
+        })
+        .join('\n');
+    } else {
+      // 5. 배열이 비어있으면 select 태그 하나만 생성
+      replaceHtml = `\t<div class="multi multi-1">
+\t\t<select id="x1" style="width: 100%;min-height: 30px;border: 1px solid #ccc;border-radius: 7px;">
+\t\t\t${defaultOption}
+\t\t\t${options.join('\n\t\t\t')}
+\t\t</select>
+\t</div>`;
+    }
+  }
+
+  replaceHtml = `<div class="multi-container" style="display:flex; flex-direction: column; gap: 20px; width: 100%;">\n${replaceHtml}\n</div>`;
 
   return replaceHtml;
 };
@@ -186,6 +258,12 @@ export function activate(context: vscode.ExtensionContext) {
     executeCommand(true, 'label');
   });
   context.subscriptions.push(createLabelWithValue);
+
+  // ctrl+2 : option 태그 생성
+  const createOption = vscode.commands.registerCommand('opsv-snd-editor.createOption', () => {
+    executeCommand(false, 'option');
+  });
+  context.subscriptions.push(createLabel);
 
   // ctrl+t : input text를 생성
   const createInputTexts = vscode.commands.registerCommand('opsv-snd-editor.createInputTexts', () => {
@@ -232,6 +310,29 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(createInputNumbers);
+
+  // ctrl+shift+s Create Dropdown
+  const createDropdown = vscode.commands.registerCommand('opsv-snd-editor.createDropdown', () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      vscode.window.showErrorMessage('No active editor found!');
+      return;
+    }
+
+    const document = editor.document;
+    let selections = editor.selections;
+
+    for (const selection of selections) {
+      const base = document.getText(selection).trim();
+      let replaceHtml = createSelect(base);
+
+      editor.edit((editBuilder) => {
+        editBuilder.replace(selection, replaceHtml);
+      });
+    }
+  });
+
+  context.subscriptions.push(createDropdown);
 
   // ctrl+shift+c : 복사 했을 때 line join, trim()을 한 뒤에 복사
   const copyForEditor = vscode.commands.registerCommand('opsv-snd-editor.copyForEditor', async () => {

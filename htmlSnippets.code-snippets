@@ -1,0 +1,15 @@
+{
+  "multiNumberTotalHTML": {
+    "prefix": "multi-num-total",
+    "scope": "html",
+    "body": [
+      "<div class=\"multi-total\" style=\"display: flex;flex-direction: column;gap: 5px;border-top: 1px solid #ccc;padding-top: 7px;margin-bottom: 7px;\">",
+      "  <label for=\"xTotal\">합계</label>",
+      "  <div style=\"display: flex; gap:5px; align-items: center;\">",
+      "    <input type=\"number\" id=\"xTotal\" style=\"border: 1px solid #ccc; border-radius: 7px; height: 25px; width: 100%; max-width: 70px;background-color: #ececec; color: rgb(245, 94, 94);font-weight: bold;\" readonly/>",
+      "  </div>",
+      "</div>"
+    ],
+    "description": "복수 숫자형 합계 HTML"
+  }
+}

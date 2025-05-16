@@ -4,7 +4,7 @@
   "description": "Opensurvey Editor Snippets and shourtCuts",
   "publisher": "Opensurvey-Chuck",
   "icon": "images/icon.png",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/dlcks7456/opsv-vscode.git"
@@ -34,12 +34,20 @@
         "title": "label 태그 생성 (코드 매칭)"
       },
       {
+        "command": "opsv-snd-editor.createOption",
+        "title": "option 태그 생성"
+      },
+      {
         "command": "opsv-snd-editor.createInputTexts",
         "title": "복수 주관식 문자형 HTML 생성 단축키"
       },
       {
         "command": "opsv-snd-editor.createInputNumbers",
         "title": "복수 주관식 숫자형 HTML 생성 단축키"
+      },
+      {
+        "command": "opsv-snd-editor.createDropdown",
+        "title": "<select> Tag 생성 단축키"
       }
     ],
     "keybindings": [
@@ -59,6 +67,11 @@
         "when": "editorTextFocus && editorLangId == 'html'"
       },
       {
+        "command": "opsv-snd-editor.createOption",
+        "key": "ctrl+2",
+        "when": "editorTextFocus && editorLangId == 'html'"
+      },
+      {
         "command": "opsv-snd-editor.createInputTexts",
         "key": "ctrl+t",
         "when": "editorTextFocus && editorLangId == 'html'"
@@ -67,16 +80,21 @@
         "command": "opsv-snd-editor.createInputNumbers",
         "key": "ctrl+n",
         "when": "editorTextFocus && editorLangId == 'html'"
+      },
+      {
+        "command": "opsv-snd-editor.createDropdown",
+        "key": "ctrl+shift+s",
+        "when": "editorTextFocus && editorLangId == 'html'"
       }
     ],
     "snippets": [
       {
         "language": "javascript",
-        "path": "./legacyCodes.code-snippets"
+        "path": "./javascriptSnippets.code-snippets"
       },
       {
-        "language": "javascript",
-        "path": "./rebuildCodes.code-snippets"
+        "language": "html",
+        "path": "./htmlSnippets.code-snippets"
       }
     ]
   },
