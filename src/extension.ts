@@ -362,6 +362,47 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(copyForEditor);
+
+  // ctrl+shift+a : to array (1-9 > [1, 2, 3, 4, 5, 6, 7, 8, 9])
+  const createArray = vscode.commands.registerCommand('opsv-snd-editor.createArray', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    const selection = editor.selection;
+    let text = document.getText(selection);
+
+    if (!text.includes('-')) {
+      vscode.window.showErrorMessage('`-` 를 통해 범위를 지정해주세요. (ex. 1-9)');
+      return;
+    }
+
+    const splitText = text.split('-');
+    if (splitText.length !== 2) {
+      vscode.window.showErrorMessage('입력 포맷을 확인해주세요. (ex. 1-9)');
+      return;
+    }
+
+    const [start, end] = splitText.map(Number);
+
+    if (start > end) {
+      vscode.window.showErrorMessage('시작 숫자가 끝 숫자보다 클 수 없습니다.');
+      return;
+    }
+
+    const arr: any = [];
+    for (let i = start; i <= end; i++) {
+      arr.push(i);
+    }
+
+    editor.edit((editBuilder) => {
+      editBuilder.replace(selection, `[${arr.filter((a: any) => a > 0).join(', ')}]`);
+    });
+  });
+
+  context.subscriptions.push(createArray);
 }
 
 export function deactivate() {}

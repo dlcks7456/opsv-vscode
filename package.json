@@ -4,7 +4,7 @@
   "description": "Opensurvey Editor Snippets and shourtCuts",
   "publisher": "Opensurvey-Chuck",
   "icon": "images/icon.png",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/dlcks7456/opsv-vscode.git"
@@ -48,6 +48,10 @@
       {
         "command": "opsv-snd-editor.createDropdown",
         "title": "<select> Tag 생성 단축키"
+      },
+      {
+        "command": "opsv-snd-editor.createArray",
+        "title": "`start-end` 포맷을 배열로 변환"
       }
     ],
     "keybindings": [
@@ -85,6 +89,11 @@
         "command": "opsv-snd-editor.createDropdown",
         "key": "ctrl+shift+s",
         "when": "editorTextFocus && editorLangId == 'html'"
+      },
+      {
+        "command": "opsv-snd-editor.createArray",
+        "key": "ctrl+shift+a",
+        "when": "editorTextFocus && editorLangId == 'javascript'"
       }
     ],
     "snippets": [
