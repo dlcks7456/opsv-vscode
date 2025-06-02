@@ -211,7 +211,7 @@ const createSelect = (base: string) => {
 
     // 2. 나머지 텍스트가 있는 경우 배열로 분리
     const textArray = remainingText.trim() !== '' ? remainingText.trim().split('\n') : [];
-    const defaultOption = `<option value=''>하나 선택...</option>`;
+    const defaultOption = `<option value="">하나 선택...</option>`;
 
     // 3 & 4. 배열 기반으로 select 태그 생성 및 option 삽입
     if (textArray.length > 0) {

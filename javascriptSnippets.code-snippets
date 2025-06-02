@@ -1646,5 +1646,55 @@
       "})()"
     ],
     "description": "thisOrThat with Group Rotation"
+  },
+  "statusScreenOut": {
+    "prefix": "scr",
+    "scope": "js",
+    "body": [
+      "const redirect = {",
+      "  // Redirect URL",
+      "  screenout: `https://SCREENOUT_URL.com`,",
+      "  complete: `https://COMPLETE_URL.com`,",
+      "  quotafull: `https://QUOTAFULL_URL.com`,",
+      "};",
+      "",
+      "const quotaFlag = \\$(`#quotaFlag`);",
+      "const redirectUrl = \\$(`#redirectUrl`);",
+      "",
+      "/* 기본 스크린 아웃 설정 */",
+      "quotaFlag.val(1);",
+      "redirectUrl.val(window.redirect.screenout);",
+      "setAnswer(1, ValueType.TEXT, 1, true);"
+    ],
+    "description": "[리다이렉트:ScreenOut] (사전 로직) 문항 기준 쿼터 세팅시 Status 변경 로직"
+  },
+  "statusOverQuota": {
+    "prefix": "over",
+    "scope": "js",
+    "body": [
+      "(() => {",
+      "  // QuotaFull",
+      "  \\$('#quotaFlag').val(3);",
+      "  \\$('#redirectUrl').val(window.redirect.quotafull);",
+      "  setAnswer(1, ValueType.TEXT, 3, true);",
+      "  ${1}",
+      "  return true;",
+      "})()"
+    ],
+    "description": "[리다이렉트:OverQuota] (최초 쿼터 문항) 문항 기준 쿼터 세팅시 Status 변경 로직"
+  },
+  "statusComplete": {
+    "prefix": "comp",
+    "scope": "js",
+    "body": [
+      "(() => {",
+      "  // Complete",
+      "  \\$('#quotaFlag').val(2);",
+      "  \\$('#redirectUrl').val(window.redirect.complete);",
+      "  setAnswer(1, ValueType.TEXT, 2, true);",
+      "  return true;",
+      "})()"
+    ],
+    "description": "[리다이렉트:Complete] (본설문 진입 문항) 문항 기준 쿼터 세팅시 Status 변경 로직"
   }
 }
