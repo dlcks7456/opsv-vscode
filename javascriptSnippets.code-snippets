@@ -752,22 +752,6 @@
       "      });",
       "    }",
       "",
-      "    function resetAllSelections() {",
-      "      Object.keys(optionMap).forEach((code) => {",
-      "        const input = document.querySelector(`#answer\\${qnum}-\\${code}`);",
-      "        const option = input?.parentNode;",
-      "",
-      "        if (input && option) {",
-      "          turn_off_checkbox(\\$(option));",
-      "",
-      "          input.readOnly = false;",
-      "",
-      "          option.style.opacity = '1';",
-      "          option.style.pointerEvents = '';",
-      "        }",
-      "      });",
-      "    }",
-      "",
       "    updateDisabled();",
       "  } catch (e) {",
       "    console.error('Error in thisOrThat function:', e);",
@@ -879,8 +863,8 @@
     ],
     "description": "[사전 로직] exec/cond/validate/hangle"
   },
-  "replaceText": {
-    "prefix": "pre-replace",
+  "replaceTextFunction": {
+    "prefix": "pre-rpt",
     "scope": "js",
     "body": [
       "window.replaceText = (replacements, qnum = null) => {",
@@ -1418,13 +1402,13 @@
     "description": "Arrow Function"
   },
   "groupRotation": {
-    "prefix": "group",
+    "prefix": "gr",
     "scope": "js",
     "body": ["groupRotation([", "    [group1],", "    [group2],", "])"],
     "description": "groupRotation"
   },
   "groupRotationWithBot": {
-    "prefix": "group-bot",
+    "prefix": "gr-bot",
     "scope": "js",
     "body": [
       "groupRotation([",
@@ -1438,7 +1422,7 @@
     "description": "groupRotation with bottom"
   },
   "groupRotationWithTop": {
-    "prefix": "group-top",
+    "prefix": "gr-top",
     "scope": "js",
     "body": [
       "groupRotation([",
@@ -1452,7 +1436,7 @@
     "description": "groupRotation with top"
   },
   "groupRotationWithAll": {
-    "prefix": "group-all",
+    "prefix": "gr-all",
     "scope": "js",
     "body": [
       "groupRotation([",
@@ -1696,5 +1680,11 @@
       "})()"
     ],
     "description": "[리다이렉트:Complete] (본설문 진입 문항) 문항 기준 쿼터 세팅시 Status 변경 로직"
+  },
+  "replaceText": {
+    "prefix": "rpt",
+    "scope": "js",
+    "body": ["replaceText({", "  ${1:KEY}: ${2:text}", "});"],
+    "description": "replaceText"
   }
 }
