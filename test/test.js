@@ -1,114 +1,43 @@
-// ratingHandler({ reverse: true, showValue: true});
-window.rating = (obj) => {
-  return ratingHandler({ ...obj, qNum: cur });
+thisOrThat({
+ g1: [1, 2],   // 1, 2 서로 중복불가
+ g2: [3, 4, 5], // 3, 4, 5는 서로 중복불가
+ g3: [6, [7, 8]], // 6 선택시 7, 8 선택 불가 / 반대도 동일
+ g4: [[9, 10], [11, 12]], // 9, 10 선택시 11, 12 선택 불가 / 반대도 동일
+})
+
+1~10
+1~5, 11
+6~10
+
+11
+
+window.between = (start, end) => {
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 };
 
-function ratingHandler({ reverse = false, showValue = false, qNum = null, balance = false, format = null }) {
-  try {
-    const surveyForm = document.querySelector('#survey_form');
-    let ratings = [];
-    if (qNum === null) {
-      const allQuestions = surveyForm.querySelectorAll('.survey');
-      ratings = [...allQuestions].filter((question) => [5, 9].includes(Number(question.querySelector('#type').value)));
-    } else {
-      if (Array.isArray(qNum)) {
-        ratings = qNum.map((q) => surveyForm.querySelectorAll(`#survey${q}`));
-      } else {
-        ratings = [surveyForm.querySelector(`#survey${qNum}`)];
-      }
-    }
+groupRotation([
+  between(1, 5),
+  between(6, 10)
+]) 
 
-    ratings.forEach((rating) => {
-      const cells = rating.querySelectorAll('.answer-eval-wrapper tbody tr:first-child td');
-      const score = cells.length;
-      const ratingType = Number(rating.querySelector('#type').value);
-      const tableFlag = score > 7;
+thisOrThat({
+ g1: [1, 2],   // 1, 2 서로 중복불가
+ g2: [3, 4, 5], // 3, 4, 5는 서로 중복불가
+ g3: [6, [7, 8]], // 6 선택시 7, 8 선택 불가 / 반대도 동일
+ g4: [[9, 10], [11, 12]], // 9, 10 선택시 11, 12 선택 불가 / 반대도 동일
+})
 
-      let ratingCSS = '';
-      let tableCellCSS = '';
+// 1, 2번은 중복불가
+// 3, 4번 중복불가
+// 5~8번 보기가 있다고 가정
 
-      if (ratingType === 5) {
-        tableCellCSS += `
-              td {
-                  width: 100%;
-              }`;
-
-        if (reverse) {
-          ratingCSS += `
-              #${rating.id} .answer-eval-wrapper {
-                  tbody tr {
-                      ${tableFlag ? 'display: flex;' : ''}
-                      flex-direction: row-reverse;
-
-                      ${tableFlag ? tableCellCSS : ''}
-
-                      &:last-child {
-                        td:first-child {
-                          text-align: right!important;
-                        }
-                        td:last-child {
-                          text-align: left!important;
-                        }
-                      }
-                  }
-              }
-              `;
-        }
-
-        if ((showValue || balance) && !tableFlag) {
-          ratingCSS += `
-                  #${rating.id} table tbody tr:first-child td {
-                      position: relative;
-                  }
-
-                  #${rating.id} .cell-value {
-                      position: absolute;
-                      bottom: -60%;
-                      left: 50%;
-                      transform: translate(-50%, -50%);
-                      font-size: 0.7rem;
-                      z-index: 999;
-                      color: #2b2a2a;
-                      pointer-events: none;
-                      font-weight: bold;
-                      width: 100%;
-                      text-align: center;
-                  }`;
-          const maxScore = cells.length;
-          const halfScore = maxScore % 2 === 0 ? Math.floor(maxScore / 2) : Math.floor(maxScore / 2) + 1;
-
-          cells.forEach((cell) => {
-            let cellValue = Number(cell.querySelector('input').value);
-            if (balance) {
-              cellValue = Math.abs(cellValue - halfScore) + (cellValue <= halfScore && maxScore % 2 === 0 ? 1 : 0);
-            }
-            const valueLabel = document.createElement('div');
-            valueLabel.classList.add('cell-value');
-            valueLabel.textContent = `[${cellValue}점]`;
-            if (format !== null) {
-              valueLabel.textContent = format.replace('%d', cellValue);
-            }
-            cell.appendChild(valueLabel);
-          });
-        }
-      }
-
-      if (ratingType === 9) {
-        ratingCSS += `
-        #${rating.id} .answer .answer-wrapper {
-          display: flex;
-          flex-direction: column-reverse;
-        }
-        `;
-      }
-
-      const styleTag = document.createElement('style');
-      styleTag.textContent = ratingCSS;
-      rating.insertBefore(styleTag, rating.firstChild);
-    });
-  } catch (error) {
-    console.error('ratingHandler error:', error);
-  } finally {
+(()=>{
+    const groups = {
+      g1: [1, 2],
+      g2: [3, 4],
+      g3: [5, 6],
+    };
+    thisOrThat(groups);
+    groupRotation(Object.values(groups));
     return true;
-  }
-}
+})()

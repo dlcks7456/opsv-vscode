@@ -11,5 +11,113 @@
       "</div>"
     ],
     "description": "복수 숫자형 합계 HTML"
+  },
+  "intellectualProperty": {
+    "prefix": "ip",
+    "scope": "html",
+    "body": [
+      "<!-- 타이틀 -->",
+      "${1:<h4 class=\"fr-tag\"> 본 설문에는&nbsp;<strong>지식재산권 보호가 필요한</strong>&nbsp;<strong>내용</strong>이 포함되어 있습니다. </h4> <h4 class=\"fr-tag\">이에 따라 설문 응답을 시작하기 전에 아래와 같이 안내 드립니다.</h4> <h4 class=\"fr-tag\" style=\"text-align: center\" data-mce-style=\"text-align: center;\"> <img src=\"//d14nbh8wv9pwrf.cloudfront.net/upload/127585/4526509/%EC%A7%80%EC%8B%9D%EC%9E%AC%EC%82%B0%EA%B6%8C+%EC%95%88%EB%82%B4%EB%AC%B8-1688952648986-cropped.png\" alt=\"\" data-mce-src=\"//d14nbh8wv9pwrf.cloudfront.net/upload/127585/4526509/%EC%A7%80%EC%8B%9D%EC%9E%AC%EC%82%B0%EA%B6%8C+%EC%95%88%EB%82%B4%EB%AC%B8-1688952648986-cropped.png\" /> </h4> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\">위 내용을 충분히 숙지하셨다면,</h4> <h4 class=\"fr-tag\"> 아래 보기를 선택하여&nbsp;<strong >본 설문에서 제공되는&nbsp;내용 및 동영상/음원/이미지 및 기타 저작물에 대한 지식재산권을 보호할 것을 서약</strong >해 주시기 바랍니다. </h4> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\"> <span style=\"color: #ff2a20; font-size: 10pt\" data-mce-style=\"color: #ff2a20; font-size: 10pt;\" ><strong >* 서약할 수 없는 경우, 화면 우측 상단의&nbsp;\"나가기\"&nbsp;버튼을 눌러서 설문을 종료해 주세요.</strong ></span > </h4>}",
+      "",
+      "<!-- 보기 -->",
+      "${2:본 설문에서 제공되는 내용 및 동영상/음원/이미지 및 기타 저작물에 대한 지식재산권을 보호할 것을 서약합니다.}",
+      "",
+      "<!-- 로직 (holdNext를 사용 또는 아래 코드 사용) -->",
+      "\\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', \"alert('더 자세히 확인하고 응답해 주세요.')\") &&",
+      "setTimeout(() => {",
+      "  \\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', 'goNext()');",
+      "}, 5000)"
+    ],
+    "description": "지적재산권 (한글)"
+  },
+  "intellectualPropertyEng": {
+    "prefix": "ip-eng",
+    "scope": "html",
+    "body": [
+      "<!-- 타이틀 -->",
+      "${1:<h4 class=\"fr-tag\"> This survey includes productions that require<strong>&nbsp;protection of Intellectual Property Rights.</strong ><br />Therefore, we will inform you of the following before beginning the survey. </h4> <hr /> <table class=\"fr-tag mce-item-table\" style=\"width: 100%; font-size: 16px\" data-mce-style=\"width: 100%; font-size: 16px;\" > <tbody> <tr style=\"height: 89px\" data-mce-style=\"height: 89px;\"> <td style=\"padding: 10px; border: 1px dashed #979797; background-color: #f0f0f0; text-align: left; height: 89px\" data-mce-style=\"padding: 10px; border: 1px dashed #979797; background-color: #f0f0f0; text-align: left; height: 89px;\" > <span style=\"font-size: 10pt\" data-mce-style=\"font-size: 10pt;\" ><strong>What are Intellectual Property Rights?</strong></span ><br /><span style=\"font-size: 10pt\" data-mce-style=\"font-size: 10pt;\" >Intellectual Property Rights refer to the legal rights that ensure the realization of the property value of knowledge, information, technology, and expression created or discovered through creative activities or experiences along with other intangible creations and outcomes.</span > </td> </tr> </tbody> </table> <table class=\"fr-tag mce-item-table\"> <tbody> <tr style=\"height: 159px\" data-mce-style=\"height: 159px;\"> <td style=\"height: 159px\" data-mce-style=\"height: 159px;\"> <h4 class=\"fr-tag\" style=\"text-align: center\" data-mce-style=\"text-align: center;\"> <span style=\"font-size: 12pt\" data-mce-style=\"font-size: 12pt;\" ><strong>Information on Intellectual Property Rights Protection</strong></span > </h4> <h4 class=\"fr-tag\" style=\"text-align: left\" data-mce-style=\"text-align: left;\"> <span style=\"font-size: 12pt\" data-mce-style=\"font-size: 12pt;\">&nbsp;</span> </h4> <ul> <li> <span style=\"font-size: 10pt\" data-mce-style=\"font-size: 10pt;\" >OPENSURVEY and the author retains the intellectual property rights over the content, videos, music, images and other properties used in the survey.</span > </li> <li> The distribution, including illegal use or reproduction, publication, transmission, links, in whole or in part of the content, videos, music, images, and other properties in the survey is prohibited by law. </li> <li> You may be held liable by law for the distribution of the content, videos, music, images, and other properties used in the survey without permission. </li> </ul> </td> </tr> </tbody> </table> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\">If you read and understand the above,</h4> <h4 class=\"fr-tag\"> <strong >please select the option below and pledge to protect the intellectual property rights to the content, videos, music, images, and other properties used in this survey.</strong > </h4> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\"> <span style=\"color: #ff2a20; font-size: 10pt\" data-mce-style=\"color: #ff2a20; font-size: 10pt;\" ><strong >* If you cannot agree to this pledge, please select the \"Exit\" button at the top right of the screen to end the survey.</strong ></span > </h4>}",
+      "",
+      "<!-- 보기 -->",
+      "${2:I pledge to protect the intellectual property rights of the content, videos, music, images, and other properties in this survey.}",
+      "",
+      "<!-- 로직 (holdNext를 사용 또는 아래 코드 사용) -->",
+      "\\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', \"alert('Please review more carefully and respond.')\") &&",
+      "setTimeout(() => {",
+      "  \\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', 'goNext()');",
+      "}, 5000)"
+    ],
+    "description": "지적재산권 (영어)"
+  },
+  "intellectualPropertyJpn": {
+    "prefix": "ip-jp",
+    "scope": "html",
+    "body": [
+      "<!-- 타이틀 -->",
+      "${1:<h4 class=\"fr-tag\">アンケートには知識財産権保護が必要な著作物が含まれています。</h4> <h4 class=\"fr-tag\">アンケートを始める前に、次の知的財産権に関するご案内をよくお読みの上、質問に答えてください。</h4> <hr /> <table class=\"fr-tag\" style=\"width: 100%; font-size: 16px\"> <tbody> <tr style=\"height: 89px\"> <td style=\"padding: 10px; border: 1px dashed #979797; background-color: #f0f0f0; text-align: left; height: 89px\"> <h4 class=\"fr-tag\"> <strong><span style=\"font-size: 10pt\">知識財産権とは？</span></strong> </h4> <h4 class=\"fr-tag\"> <span style=\"font-size: 10pt\" >人間の創造活動や経験により創出または発見された知識・情報・技術・表現およびその他の無形創作物・結果物が財産的価値を実現できるように法律で保障する権利であります。</span > </h4> </td> </tr> </tbody> </table> <table class=\"fr-tag\" style=\"width: 100%; font-size: 16px\"> <tbody> <tr> <td style=\"padding: 10px; border: 1px solid #979797; text-align: center\"> <strong>知識財産権保護に関するご案内</strong><br /> <br /> <ul> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\"> 本調査で提供されるアンケートの内容・動画・音源・画像、その他の著作物に関する知識財産権は、著作者と(株)オープンサーベイにあります。</span > </li> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\" >アンケートの内容・動画・音源・画像、その他の著作物の全部または一部の不法利用、複製、掲示、転送、リンクなどの配布行為は、法律的に禁止されています。</span > </li> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\" >アンケートの内容・動画・音源・画像、その他の著作物の関連内容を許可なく配布する場合、それに対する法的責任を問うことがあります。</span > </li> </ul> </td> </tr> </tbody> </table> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\">上記の内容を十分熟知なさったうえ</h4> <h4 class=\"fr-tag\"> <strong >下の選択肢から選択して本アンケートから提供される内容及び映像・音源・イメージ及びその他の著作物に関する知識財産権を保護することを誓約してください。</strong > </h4> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\"> <span style=\"font-size: 10pt; color: #ff2a20\" ><strong>* 誓約できない場合は、右上の「出る」ボタンをクリックし、アンケートを終了してください。 </strong></span > </h4>}",
+      "",
+      "<!-- 보기 -->",
+      "${2:本アンケートにおいて提供される内容および動画・音源・画像およびその他の著作物に対する知識財産権を保護することを誓約します}",
+      "",
+      "<!-- 로직 (holdNext를 사용 또는 아래 코드 사용) -->",
+      "\\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', \"alert('より詳しく確認してご回答ください。')\") &&",
+      "setTimeout(() => {",
+      "  \\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', 'goNext()');",
+      "}, 5000)"
+    ],
+    "description": "지적재산권 (일본어)"
+  },
+  "intellectualPropertyGer": {
+    "prefix": "ip-ger",
+    "scope": "html",
+    "body": [
+      "<!-- 타이틀 -->",
+      "${1:<h4 class=\"fr-tag\"> <span>Diese Umfrage umfasst Produktionen, die durch geistige Eigentumsrechte geschützt sind. <br /> Daher möchten wir Sie vor Beginn der Umfrage über Folgendes informieren. <br /> </span ></span> </h4> <hr /> <table class=\"fr-tag\" style=\"width: 100%; font-size: 16px\"> <tbody> <tr style=\"height: 89px\"> <td style=\"padding: 10px; border: 1px dashed #979797; background-color: #f0f0f0; text-align: left; height: 89px\"> <strong><span style=\"font-size: 10pt\">Was sind Rechte an geistigem Eigentum?</span></strong ><br /><span style=\"font-size: 10pt\"> Rechte an geistigem Eigentum beziehen sich auf die gesetzlichen Rechte, die die Realisierung des Eigentumswertes von Wissen, Informationen, Technologien, Ausdrucksformen, die durch kreative Aktivitäten oder Erfahrungen geschaffen oder entdeckt wurden, sowie anderer immaterieller Schöpfungen und Ergebnisse sicherstellen.</span > </td> </tr> </tbody> </table> <table class=\"fr-tag\" style=\"width: 100%; font-size: 16px\"> <tbody> <tr> <td style=\"padding: 10px; border: 1px solid #979797; text-align: center\"> <strong>Informationen zum Schutz der Rechte an geistigem Eigentum </strong><br /> <br /> <ul> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\"> OPENSURVEY und der Autor behalten die Rechte am geistigen Eigentum an den Inhalten, Videos, Musik, Bildern und anderen Objekten der Umfrage.</span > </li> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\" >Die Verbreitung, einschließlich der illegalen Nutzung oder Vervielfältigung, Veröffentlichung, Übertragung, Verknüpfung des gesamten Inhalts, der Videos, der Musik, der Bilder und anderer Objekte in der Umfrage oder von Teilen davon ist gesetzlich verboten.</span > </li> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\" >Sie können gesetzlich haftbar gemacht werden, wenn Sie die Inhalte, Videos, Musik, Bilder und andere Eigenschaften der Umfrage ohne Genehmigung verbreiten.</span > </li> </ul> </td> </tr> </tbody> </table> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\"> Wenn Sie das oben Gesagte gelesen und verstanden haben, <br /> <strong >wählen Sie bitte die nachstehende Option aus und verpflichten Sie sich, die geistigen Eigentumsrechte an den Inhalten, Videos, Musik, Bildern und anderen Objekten in dieser Umfrage zu schützen.</strong > </h4> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\"> <span style=\"font-size: 10pt; color: #ff2a20\" ><strong >* Wenn Sie diesem nicht zustimmen können, wählen Sie bitte die Schaltfläche \"Beenden\" oben rechts auf dem Bildschirm, um die Umfrage zu beenden.</strong ></span > </h4>}",
+      "",
+      "<!-- 보기 -->",
+      "${2:Ich verpflichte mich, die geistigen Eigentumsrechte an den Inhalten, Videos, Musik, Bildern und anderen Objekten in dieser Umfrage zu schützen.}",
+      "",
+      "<!-- 로직 (holdNext를 사용 또는 아래 코드 사용) -->",
+      "\\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', \"alert('Bitte überprüfen Sie sorgfältiger und antworten Sie.')\") &&",
+      "setTimeout(() => {",
+      "  \\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', 'goNext()');",
+      "}, 5000)"
+    ],
+    "description": "지적재산권 (독일어)"
+  },
+  "intellectualPropertyTai": {
+    "prefix": "ip-tai",
+    "scope": "html",
+    "body": [
+      "<!-- 타이틀 -->",
+      "${1:<h4 class=\"fr-tag\">本調查問卷包含須受知識產權保護的內容.</h4> <h4 class=\"fr-tag\">因此,在開始進行調查問卷之前通知以下注意事項.</h4> <hr /> <table class=\"fr-tag\" style=\"width: 100%; font-size: 16px\"> <tbody> <tr style=\"height: 89px\"> <td style=\"padding: 10px; border: 1px dashed #979797; background-color: #f0f0f0; text-align: left; height: 89px\"> <h4 class=\"fr-tag\"> <span style=\"font-size: 10pt\"><strong>什麼叫知識財產權?</strong></span> </h4> <h4 class=\"fr-tag\"> <span style=\"font-size: 10pt\" >是促使通過人類的創造性活動或經驗,創造或發現的知識/信息/技術/表現及以外無形創作物/成果物能夠實現財產價值的法律保障.</span > </h4> </td> </tr> </tbody> </table> <table class=\"fr-tag\" style=\"width: 100%; font-size: 16px\"> <tbody> <tr> <td style=\"padding: 10px; border: 1px solid #979797; text-align: center\"> <strong>涉知識財產權保護的通知</strong><br /> <br /> <ul> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\"> 調查問卷內提供的內容及視頻/音源/圖片及其他著作物的知識財產權歸於著作者和(株)OPENSURVEY.</span > </li> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\" >法律嚴禁對問卷內提供的內容及視頻/音源/圖片及其他著作物的全部或部分的違法使用或複制上傳, 傳送, 鏈接等所有發布行為.</span > </li> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\" >如未經或許發布問卷內提供的內容及視頻/音源/圖片及其他著作物的任何內容,將會受到相關法律制裁.</span > </li> </ul> </td> </tr> </tbody> </table> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\">如充分熟知以上內容,</h4> <h4 class=\"fr-tag\"> <strong>請選擇以下選項並簽字承諾對本調查問卷提供的內容及視頻/音源/圖片及其他著作物的知識財產權的保護. </strong> </h4> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\"> <span style=\"font-size: 10pt; color: #ff2a20\" ><strong>* 如無法簽字承諾, 請選擇右上方\"退出\"按鈕並結束調查.</strong></span > </h4>}",
+      "",
+      "<!-- 보기 -->",
+      "${2:承諾保護對本調查問卷內提供的內容及視頻/音源/圖片及其他著作物的知識財產權.}",
+      "",
+      "<!-- 로직 (holdNext를 사용 또는 아래 코드 사용) -->",
+      "\\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', \"alert('請更仔細確認後回答。')\") &&",
+      "setTimeout(() => {",
+      "  \\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', 'goNext()');",
+      "}, 5000)"
+    ],
+    "description": "지적재산권 (대만어)"
+  },
+  "intellectualPropertyTha": {
+    "prefix": "ip-tha",
+    "scope": "html",
+    "body": [
+      "<!-- 타이틀 -->",
+      "${1:<h4 class=\"fr-tag\"> <span >แบบสำรวจนี้ประกอบด้วยการผลิตที่จำเป็นต้องได้รับการคุ้มครองจากสิทธิทรัพย์สินทางปัญญา<br />ดังนั้นเราจึงขอแจ้งให้คุณทราบถึงสิ่งต่อไปนี้ก่อนเริ่มทำแบบสำรวจ</span > </h4> <hr /> <table class=\"fr-tag\" style=\"width: 100%; font-size: 16px\"> <tbody> <tr style=\"height: 89px\"> <td style=\"padding: 10px; border: 1px dashed #979797; background-color: #f0f0f0; text-align: left; height: 89px\"> <h4 class=\"fr-tag\"> <span style=\"font-size: 10pt\" ><strong>สิทธิในทรัพย์สินทางปัญญาคืออะไร?</strong ><br />กฎหมายทรัพย์สินทางปัญญาคือสิทธิ์ทางกฎหมายที่รับรองมูลค่าทรัพย์สินทางความรู้ ข้อมูล เทคโนโลยี การแสดงออกที่เกิดขึ้นหรือค้นพบผ่านกิจกรรมหรือประสบการณ์ทางความคิดสร้างสรรค์พร้อมกับงานสร้างสรรค์และผลลัพธ์อื่น ๆ ที่จับต้องไม่ได้</span > </h4> </td> </tr> </tbody> </table> <table class=\"fr-tag\" style=\"width: 100%; font-size: 16px\"> <tbody> <tr> <td style=\"padding: 10px; border: 1px solid #979797; text-align: center\"> <h4 class=\"fr-tag\"> <span style=\"font-size: 10pt\" ><span style=\"font-size: 12pt\"><strong>ข้อมูลเกี่ยวกับการคุ้มครองสิทธิ์ในทรัพย์สินทางปัญญา</strong></span ><br /> <br /></span> </h4> <ul> <li style=\"text-align: left\"> <span style=\"font-size: 10pt\"> OPENSURVEY และผู้เขียนเป็นผู้ที่ถือสิทธิในทรัพย์สินทางปัญญาเกี่ยวกับเนื้อหา วิดีโอ เพลง ภาพ และทรัพย์สินอื่น ๆ ในแบบสำรวจนี้</span > </li> <li style=\"text-align: left\"> การแจกจ่าย รวมถึงใช้หรือทำซ้ำ, การเผยแพร่, การโอนย้าย, ลิงค์ที่ผิดกฎหมายในเนื้อหา, วิดีโอ, เพลง ภาพ หรือทรัพย์สินอื่น ๆ ในแบบสำรวจถือว่าเป็นสิ่งที่ผิดกฎหมาย ไม่ว่าจะทั้งหมดหรือบางส่วนก็ตาม </li> <li style=\"text-align: left\"> คุณอาจต้องรับผิดตามกฎหมายหากแจกจ่ายเนื้อหา, วิดีโอ, เพลง, ภาพ และทรัพย์สินอื่น ๆ ในแบบสำรวจโดยไม่ได้รับอนุญาต </li> </ul> </td> </tr> </tbody> </table> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\"> <span >หากคุณอ่านและเข้าใจกับข้อความข้างต้นแล้ว<br /><span style=\"font-size: 12pt\" ><strong >โปรดเลือกตัวเลือกด้านล่างและ ให้คำมั่นที่จะปกป้องสิทธิในทรัพย์สินทางปัญญาเกี่ยวกับเนื้อหา, วิดีโอ, เพลง, ภาพ และทรัพย์สินอื่น ๆ จากแบบสำรวจ</strong ></span ></span > </h4> <h4 class=\"fr-tag\">&nbsp;</h4> <h4 class=\"fr-tag\"> <span style=\"color: #ff2a20\" ><strong ><span style=\"font-size: 10pt\" >* หากคุณไม่ยินยอมที่จะให้คำมั่น โปรดกดที่ปุ่ม \"ออก\" ที่อยู่มุมขวาบนของหน้าจอเพื่อสิ้นสุดการทำแบบสำรวจ</span ></strong ></span > </h4>}",
+      "",
+      "<!-- 보기 -->",
+      "${2:ฉันให้คำมั่นที่จะคุ้มครองสิทธิในทรัพย์สินทางปัญญาเกี่ยวกับเนื้อหา, วิดีโอ, เพลง, ภาพ และทรัพย์สินอื่น ๆ ในแบบสำรวจนี้}",
+      "",
+      "<!-- 로직 (holdNext를 사용 또는 아래 코드 사용) -->",
+      "\\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', \"alert('กรุณาตรวจสอบให้ละเอียดมากขึ้นและตอบ')\") &&",
+      "setTimeout(() => {",
+      "  \\$(`#survey\\${cur} .next-btn-wrapper`).attr('onclick', 'goNext()');",
+      "}, 5000)"
+    ],
+    "description": "지적재산권 (태국어)"
   }
 }
