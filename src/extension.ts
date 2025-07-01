@@ -1,5 +1,211 @@
 import * as vscode from 'vscode';
 
+let boldFontColor = '#1446be';
+let bgColor = '#c2f1ff';
+
+// test.html에서 추출한 컬러 팔레트
+const colorPalette = [
+  '#8B1416',
+  '#673919',
+  '#735C23',
+  '#4B511D',
+  '#244826',
+  '#29496A',
+  '#053269',
+  '#44255C',
+  '#82053C',
+  '#000000',
+  '#FF2A20',
+  '#FF9B28',
+  '#FDD41B',
+  '#75B52C',
+  '#00A453',
+  '#00AFEE',
+  '#1446BE',
+  '#961E8C',
+  '#FF268A',
+  '#434343',
+  '#FFC1AF',
+  '#FFD4A8',
+  '#FFF59B',
+  '#C4DD9E',
+  '#6FC89E',
+  '#67DDFF',
+  '#8CA0DC',
+  '#C18EBE',
+  '#FFB1CD',
+  '#636363',
+  '#FFE6DF',
+  '#FFEEDC',
+  '#FFFBD7',
+  '#E7F1D8',
+  '#C5E9D8',
+  '#C2F1FF',
+  '#C6E8FF',
+  '#E6D2E5',
+  '#FFE0EB',
+  '#FFFFFF',
+];
+
+// 컬러 팔레트를 보여주는 함수
+async function showColorPalette(title: string, currentColor: string): Promise<string | undefined> {
+  const items = colorPalette.map((color) => ({
+    label: `$(circle-filled) ${color}`,
+    description: color,
+    detail: `현재 색상: ${currentColor}`,
+    color: color,
+  }));
+
+  const selected = await vscode.window.showQuickPick(items, {
+    placeHolder: `${title} - 색상을 선택하세요`,
+    matchOnDescription: true,
+    matchOnDetail: true,
+  });
+
+  return selected?.color;
+}
+
+// Webview로 컬러 팔레트 보여주기
+async function showColorPaletteWebview(title: string, currentColor: string): Promise<string | undefined> {
+  return new Promise((resolve) => {
+    const prevEditor = vscode.window.activeTextEditor;
+    const panel = vscode.window.createWebviewPanel('colorPalette', title, vscode.ViewColumn.Active, {
+      enableScripts: true,
+    });
+
+    // 팔레트 HTML 생성
+    const colorBoxHtml = colorPalette
+      .map(
+        (color, idx) => `
+      <button class="color-box${
+        color === currentColor ? ' selected' : ''
+      }" data-color="${color}" tabindex="0" aria-label="${color}" style="background:${color};" data-idx="${idx}"></button>
+    `
+      )
+      .join('');
+
+    panel.webview.html = `
+      <!DOCTYPE html>
+      <html lang="ko">
+      <head>
+        <meta charset="UTF-8">
+        <style>
+          body { background: #f6f6f6; margin: 0; padding: 18px 10px 10px 10px; font-family: 'Segoe UI', 'Apple SD Gothic Neo', Arial, sans-serif; }
+          h3 { margin: 0 0 12px 0; font-size: 1.08em; color: #222; }
+          .palette {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 8px;
+            width: 300px;
+            max-width: 100vw;
+          }
+          .color-box {
+            width: 28px; height: 28px; border-radius: 7px; border: 2px solid #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            cursor: pointer;
+            outline: none;
+            transition: border 0.18s, box-shadow 0.18s;
+            padding: 0; margin: 0;
+            display: flex; align-items: center; justify-content: center;
+          }
+          .color-box.selected,
+          .color-box:focus {
+            border: 2.5px solid #0078d4;
+            box-shadow: 0 0 0 2px #b3d6f7;
+            z-index: 1;
+          }
+          .color-box:hover {
+            border: 2.5px solid #333;
+          }
+        </style>
+      </head>
+      <body>
+        <h3>${title}</h3>
+        <div class="palette" id="palette">
+          ${colorBoxHtml}
+        </div>
+        <script>
+          const boxes = Array.from(document.querySelectorAll('.color-box'));
+          let focusIdx = boxes.findIndex(b => b.classList.contains('selected'));
+          if (focusIdx < 0) focusIdx = 0;
+          boxes[focusIdx].focus();
+
+          function selectColor(idx) {
+            const color = boxes[idx].getAttribute('data-color');
+            window.acquireVsCodeApi().postMessage({ type: 'colorSelected', color });
+          }
+
+          document.addEventListener('keydown', (e) => {
+            if (!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Enter"," ","Tab","Shift","Escape"].includes(e.key)) return;
+            let rowLen = 10;
+            if (e.key === 'ArrowLeft') {
+              focusIdx = (focusIdx + boxes.length - 1) % boxes.length;
+              boxes[focusIdx].focus();
+              e.preventDefault();
+            } else if (e.key === 'ArrowRight') {
+              focusIdx = (focusIdx + 1) % boxes.length;
+              boxes[focusIdx].focus();
+              e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
+              focusIdx = (focusIdx - rowLen + boxes.length) % boxes.length;
+              boxes[focusIdx].focus();
+              e.preventDefault();
+            } else if (e.key === 'ArrowDown') {
+              focusIdx = (focusIdx + rowLen) % boxes.length;
+              boxes[focusIdx].focus();
+              e.preventDefault();
+            } else if (e.key === 'Enter' || e.key === ' ') {
+              selectColor(focusIdx);
+              e.preventDefault();
+            } else if (e.key === 'Escape') {
+              window.acquireVsCodeApi().postMessage({ type: 'cancel' });
+            }
+          });
+
+          boxes.forEach((box, idx) => {
+            box.addEventListener('click', () => selectColor(idx));
+            box.addEventListener('focus', () => { focusIdx = idx; });
+          });
+        </script>
+      </body>
+      </html>
+    `;
+
+    // 메시지 수신
+    panel.webview.onDidReceiveMessage(
+      async (msg) => {
+        if (msg.type === 'colorSelected') {
+          resolve(msg.color);
+          panel.dispose();
+          if (prevEditor) {
+            await vscode.window.showTextDocument(prevEditor.document, prevEditor.viewColumn, false);
+          }
+        } else if (msg.type === 'cancel') {
+          resolve(undefined);
+          panel.dispose();
+          if (prevEditor) {
+            await vscode.window.showTextDocument(prevEditor.document, prevEditor.viewColumn, false);
+          }
+        }
+      },
+      undefined,
+      []
+    );
+
+    // 사용자가 닫으면 undefined 반환 + 포커스 복원
+    panel.onDidDispose(
+      async () => {
+        resolve(undefined);
+        if (prevEditor) {
+          await vscode.window.showTextDocument(prevEditor.document, prevEditor.viewColumn, false);
+        }
+      },
+      null,
+      []
+    );
+  });
+}
+
 function processText(input: string): string[] {
   return input
     .replace(/\t+/g, ' ') // 탭을 공백으로 치환
@@ -403,6 +609,98 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(createArray);
+
+  // ctrl+b : <b> Tag
+  const createBoldTag = vscode.commands.registerCommand('opsv-snd-editor.createBoldTag', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    const selection = editor.selection;
+    let text = document.getText(selection);
+
+    editor.edit((editBuilder) => {
+      editBuilder.replace(selection, `<b>${text}</b>`);
+    });
+  });
+
+  context.subscriptions.push(createBoldTag);
+
+  // ctrl+i : <i> Tag
+  const createItalicTag = vscode.commands.registerCommand('opsv-snd-editor.createItalicTag', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    const selection = editor.selection;
+    let text = document.getText(selection);
+
+    editor.edit((editBuilder) => {
+      editBuilder.replace(selection, `<i>${text}</i>`);
+    });
+  });
+
+  context.subscriptions.push(createItalicTag);
+
+  // ctrl+shift+b : <span> + color Tag
+  const createSpanColorTag = vscode.commands.registerCommand('opsv-snd-editor.createSpanColorTag', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    const selection = editor.selection;
+    let text = document.getText(selection);
+
+    editor.edit((editBuilder) => {
+      editBuilder.replace(selection, `<span style="color: ${boldFontColor};font-weight: bold;">${text}</span>`);
+    });
+  });
+
+  context.subscriptions.push(createSpanColorTag);
+
+  // ctrl+shift+h : <span> + background color Tag
+  const createSpanBgColorTag = vscode.commands.registerCommand('opsv-snd-editor.createSpanBgColorTag', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    const selection = editor.selection;
+    let text = document.getText(selection);
+
+    editor.edit((editBuilder) => {
+      editBuilder.replace(selection, `<span style="background-color: ${bgColor};"><b>${text}</b></span>`);
+    });
+  });
+
+  context.subscriptions.push(createSpanBgColorTag);
+
+  // ctrl+alt+b : boldFontColor 변경 (Webview)
+  const changeBoldFontColor = vscode.commands.registerCommand('opsv-snd-editor.changeBoldFontColor', async () => {
+    const newColor = await showColorPaletteWebview('글자 색상 변경', boldFontColor);
+    if (newColor) {
+      boldFontColor = newColor;
+      vscode.window.showInformationMessage(`글자 색상이 ${newColor}로 변경되었습니다.`);
+    }
+  });
+  context.subscriptions.push(changeBoldFontColor);
+
+  // ctrl+alt+h : bgColor 변경 (Webview)
+  const changeBgColor = vscode.commands.registerCommand('opsv-snd-editor.changeBgColor', async () => {
+    const newColor = await showColorPaletteWebview('배경 색상 변경', bgColor);
+    if (newColor) {
+      bgColor = newColor;
+      vscode.window.showInformationMessage(`배경 색상이 ${newColor}로 변경되었습니다.`);
+    }
+  });
+  context.subscriptions.push(changeBgColor);
 }
 
 export function deactivate() {}

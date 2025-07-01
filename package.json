@@ -4,7 +4,7 @@
   "description": "Opensurvey Editor Snippets and shourtCuts",
   "publisher": "Opensurvey-Chuck",
   "icon": "images/icon.png",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "repository": {
     "type": "git",
     "url": "https://github.com/dlcks7456/opsv-vscode.git"
@@ -52,6 +52,26 @@
       {
         "command": "opsv-snd-editor.createArray",
         "title": "`start-end` 포맷을 배열로 변환"
+      },
+      {
+        "command": "opsv-snd-editor.createBoldTag",
+        "title": "<b> Tag 생성 단축키"
+      },
+      {
+        "command": "opsv-snd-editor.createSpanColorTag",
+        "title": "<span> + color Tag 생성 단축키"
+      },
+      {
+        "command": "opsv-snd-editor.createSpanBgColorTag",
+        "title": "<span> + background color Tag 생성 단축키"
+      },
+      {
+        "command": "opsv-snd-editor.changeBoldFontColor",
+        "title": "글자 색상 변경"
+      },
+      {
+        "command": "opsv-snd-editor.changeBgColor",
+        "title": "배경 색상 변경"
       }
     ],
     "keybindings": [
@@ -94,6 +114,36 @@
         "command": "opsv-snd-editor.createArray",
         "key": "ctrl+shift+a",
         "when": "editorTextFocus && editorLangId == 'javascript'"
+      },
+      {
+        "command": "opsv-snd-editor.createBoldTag",
+        "key": "ctrl+b",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
+      },
+      {
+        "command": "opsv-snd-editor.createItalicTag",
+        "key": "ctrl+i",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
+      },
+      {
+        "command": "opsv-snd-editor.createSpanColorTag",
+        "key": "ctrl+shift+b",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
+      },
+      {
+        "command": "opsv-snd-editor.createSpanBgColorTag",
+        "key": "ctrl+shift+h",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
+      },
+      {
+        "command": "opsv-snd-editor.changeBoldFontColor",
+        "key": "ctrl+alt+b",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
+      },
+      {
+        "command": "opsv-snd-editor.changeBgColor",
+        "key": "ctrl+alt+h",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
       }
     ],
     "snippets": [
