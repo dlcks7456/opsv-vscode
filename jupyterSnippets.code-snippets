@@ -1,0 +1,435 @@
+{
+"Single Answer": {
+    "prefix": "sa",
+    "body": [
+        "${1} = bl.sa(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    options = ${3:{}},",
+        "    etc=False,",
+        "    na=None,",
+        "    rotation=False",
+        ")"
+    ],
+    "description": "single answer"
+},
+
+"Multiple Answers": {
+    "prefix": "ma",
+    "body": [
+        "${1} = bl.ma(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    options = {",
+        "        ${3}",
+        "    },",
+        "    etc=False,",
+        "    na=None,",
+        "    rotation=False",
+        ")"
+    ],
+    "description": "multiple answers"
+},
+
+"Rank": {
+    "prefix": "rk",
+    "body": [
+        "${1} = bl.rank(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    options = {",
+        "        ${3}",
+        "    },",
+        "    etc=False,",
+        "    na=None,",
+        "    rotation=False",
+        ")"
+    ],
+    "description": "rank"
+},
+
+"Rank2": {
+    "prefix": "rk2",
+    "body": [
+        "${1} = bl.rank(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    options = {",
+        "        ${3}",
+        "    },",
+        "    min=1,",
+        "    max=2,",
+        "    etc=False,",
+        "    na=None,",
+        "    rotation=False",
+        ")"
+    ],
+    "description": "rank"
+},
+
+"Rank3": {
+    "prefix": "rk3",
+    "body": [
+        "${1} = bl.rank(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    options = {",
+        "        ${3}",
+        "    },",
+        "    min=1,",
+        "    max=3,",
+        "    etc=False,",
+        "    na=None,",
+        "    rotation=False",
+        ")"
+    ],
+    "description": "rank"
+},
+
+"Rank4": {
+    "prefix": "rk4",
+    "body": [
+        "${1} = bl.rank(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    options = {",
+        "        ${3}",
+        "    },",
+        "    min=1,",
+        "    max=4,",
+        "    etc=False,",
+        "    na=None,",
+        "    rotation=False",
+        ")"
+    ],
+    "description": "rank"
+},
+
+"Rank5": {
+    "prefix": "rk5",
+    "body": [
+        "${1} = bl.rank(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    options = {",
+        "        ${3}",
+        "    },",
+        "    min=1,",
+        "    max=5,",
+        "    etc=False,",
+        "    na=None,",
+        "    rotation=False",
+        ")"
+    ],
+    "description": "rank"
+},
+
+
+"Scale3": {
+    "prefix": "sc3",
+    "body": [
+        "${1} = bl.scale(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    left='${3}',",
+        "    center='${4}',",
+        "    right='${5:}',",
+        "    score=3,",
+        ")"
+    ],
+    "description": "Scale 3점"
+},
+
+"Scale4": {
+    "prefix": "sc4",
+    "body": [
+        "${1} = bl.scale(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    left='${3}',",
+        "    right='${4}',",
+        "    score=4,",
+        ")"
+    ],
+    "description": "Scale 4점"
+},
+
+"Scale5": {
+    "prefix": "sc5",
+    "body": [
+        "${1} = bl.scale(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    left='${3}',",
+        "    center='${4}',",
+        "    right='${5:}',",
+        "    score=5,",
+        ")"
+    ],
+    "description": "Scale 5점"
+},
+
+"Scale6": {
+    "prefix": "sc6",
+    "body": [
+        "${1} = bl.scale(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    left='${3}',",
+        "    right='${4}',",
+        "    score=6,",
+        ")"
+    ],
+    "description": "Scale 6점"
+},
+
+"Scale7": {
+    "prefix": "sc7",
+    "body": [
+        "${1} = bl.scale(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    left='${3}',",
+        "    center='${4}',",
+        "    right='${5:}',",
+        "    score=7,",
+        ")"
+    ],
+    "description": "Scale 7점"
+},
+
+"Scale9": {
+    "prefix": "sc9",
+    "body": [
+        "${1} = bl.scale(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    left='${3}',",
+        "    center='${4}',",
+        "    right='${5:}',",
+        "    score=9,",
+        ")"
+    ],
+    "description": "Scale 9점"
+},
+
+"Scale10": {
+    "prefix": "sc10",
+    "body": [
+        "${1} = bl.scale(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    left='${3}',",
+        "    right='${4}',",
+        "    score=10,",
+        ")"
+    ],
+    "description": "Scale 10점"
+},
+
+"NPS": {
+    "prefix": "nps",
+    "body": [
+        "${1} = bl.scale(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    left='${3}',",
+        "    right='${5:}',",
+        "    score=11,",
+        ")"
+    ],
+    "description": "NPS Question"
+},
+
+"Text Open Ended": {
+    "prefix": "text",
+    "body": [
+        "${1} = bl.text(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        ")"
+    ],
+    "description": "text open ended"
+},
+
+"Multiple Text Open Ended": {
+    "prefix": "multi-text",
+    "body": [
+        "${1} = bl.text(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    multi=5,",
+        "    multi_atleast=True,",
+        ")"
+    ],
+    "description": "multiple text open ended"
+},
+
+"Number": {
+    "prefix": "num",
+    "body": [
+        "${1} = bl.number(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    min=0,",
+        "    max=999,",
+        "    post_text='${3}',",
+        ")"
+    ],
+    "description": "number"
+},
+
+"Multiple Number": {
+    "prefix": "multi-num",
+    "body": [
+        "${1} = bl.number(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    min=0,",
+        "    max=100,",
+        "    total=100,",
+        "    multi={",
+        "        ${3}",
+        "    },",
+        "    multi_post='%'",
+        ")"
+    ],
+    "description": "multiple number"
+},
+
+"Address": {
+    "prefix": "address",
+    "body": [
+        "${1} = bl.address(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        ")"
+    ],
+    "description": "address"
+},
+
+"Phone": {
+    "prefix": "phone",
+    "body": [
+        "${1} = bl.phone(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        ")"
+    ],
+    "description": "phone"
+},
+
+"Date": {
+    "prefix": "date",
+    "body": [
+        "${1} = bl.date(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        ")"
+    ],
+    "description": "date"
+},
+
+"Image": {
+    "prefix": "image",
+    "body": [
+        "${1} = bl.image(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        ")"
+    ],
+    "description": "image"
+},
+
+"Dropdown": {
+    "prefix": "dropdown",
+    "body": [
+        "${1} = bl.dropdown(",
+        "    qid='${1}',",
+        "    title=f'''",
+        "${2}",
+        "    ''',",
+        "    options={",
+        "        ${3}",
+        "    },",
+        "    rows={",
+        "        ${4}",
+        "    },",
+        "    row_cond=None,",
+        "    duplicate=False",
+        ")"
+    ],
+    "description": "dropdown"
+},
+"Beluga": {
+    "prefix": "beluga",
+    "body": [
+        "from beluga import Beluga, BelugaConfig",
+        "from beluga.utils.html import box",
+        "",
+        "bl = Beluga(config=BelugaConfig(",
+        "    etc_text='기타(직접 입력)',",
+        "    default_rotation=False,",
+        "    dropdown_placeholder='하나 선택...',",
+        "    total_text='합계',",
+        "    display=True",
+        "))"
+    ],
+    "description": "beluga import and config"
+},
+
+"ExportExcel": {
+    "prefix": "export",
+    "body": [
+        "bl.to_excel('${1:EXPORT_FILE}.xlsx')"
+    ],
+    "description": "export excel"
+}
+
+}

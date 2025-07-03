@@ -4,7 +4,7 @@
   "description": "Opensurvey Editor Snippets and shourtCuts",
   "publisher": "Opensurvey-Chuck",
   "icon": "images/icon.png",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "repository": {
     "type": "git",
     "url": "https://github.com/dlcks7456/opsv-vscode.git"
@@ -72,6 +72,38 @@
       {
         "command": "opsv-snd-editor.changeBgColor",
         "title": "배경 색상 변경"
+      },
+      {
+        "command": "opsv-snd-editor.createItalicTag",
+        "title": "<i> Tag 생성 단축키"
+      },
+      {
+        "command": "opsv-snd-editor.createUnderlineTag",
+        "title": "<u> Tag 생성 단축키"
+      },
+      {
+        "command": "opsv-snd-editor.createRadioQuestion",
+        "title": "Create Radio Question"
+      },
+      {
+        "command": "opsv-snd-editor.createMultipleAnswerQuestion",
+        "title": "Create Multiple Answer Question"
+      },
+      {
+        "command": "opsv-snd-editor.createRankQuestion",
+        "title": "Create Rank Question"
+      },
+      {
+        "command": "opsv-snd-editor.createScaleQuestion",
+        "title": "Create Scale Question"
+      },
+      {
+        "command": "opsv-snd-editor.createTextQuestion",
+        "title": "Create Text Question"
+      },
+      {
+        "command": "opsv-snd-editor.createNumberQuestion",
+        "title": "Create Number Question"
       }
     ],
     "keybindings": [
@@ -83,12 +115,12 @@
       {
         "command": "opsv-snd-editor.createLabel",
         "key": "ctrl+1",
-        "when": "editorTextFocus && editorLangId == 'html'"
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
       },
       {
         "command": "opsv-snd-editor.createLabelWithValue",
         "key": "ctrl+shift+1",
-        "when": "editorTextFocus && editorLangId == 'html'"
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
       },
       {
         "command": "opsv-snd-editor.createOption",
@@ -126,6 +158,11 @@
         "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
       },
       {
+        "command": "opsv-snd-editor.createUnderlineTag",
+        "key": "ctrl+u",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
+      },
+      {
         "command": "opsv-snd-editor.createSpanColorTag",
         "key": "ctrl+shift+b",
         "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
@@ -144,6 +181,36 @@
         "command": "opsv-snd-editor.changeBgColor",
         "key": "ctrl+alt+h",
         "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
+      },
+      {
+        "command": "opsv-snd-editor.createRadioQuestion",
+        "key": "ctrl+r",
+        "when": "editorTextFocus && resourceExtname == '.ipynb'"
+      },
+      {
+        "command": "opsv-snd-editor.createMultipleAnswerQuestion",
+        "key": "ctrl+m",
+        "when": "editorTextFocus && resourceExtname == '.ipynb'"
+      },
+      {
+        "command": "opsv-snd-editor.createRankQuestion",
+        "key": "ctrl+shift+r",
+        "when": "editorTextFocus && resourceExtname == '.ipynb'"
+      },
+      {
+        "command": "opsv-snd-editor.createScaleQuestion",
+        "key": "ctrl+shift+s",
+        "when": "editorTextFocus && resourceExtname == '.ipynb'"
+      },
+      {
+        "command": "opsv-snd-editor.createTextQuestion",
+        "key": "ctrl+t",
+        "when": "editorTextFocus && resourceExtname == '.ipynb'"
+      },
+      {
+        "command": "opsv-snd-editor.createNumberQuestion",
+        "key": "ctrl+n",
+        "when": "editorTextFocus && resourceExtname == '.ipynb'"
       }
     ],
     "snippets": [
@@ -154,6 +221,10 @@
       {
         "language": "html",
         "path": "./htmlSnippets.code-snippets"
+      },
+      {
+        "language": "python",
+        "path": "./jupyterSnippets.code-snippets"
       }
     ]
   },

@@ -47,25 +47,7 @@ const colorPalette = [
   '#FFFFFF',
 ];
 
-// 컬러 팔레트를 보여주는 함수
-async function showColorPalette(title: string, currentColor: string): Promise<string | undefined> {
-  const items = colorPalette.map((color) => ({
-    label: `$(circle-filled) ${color}`,
-    description: color,
-    detail: `현재 색상: ${currentColor}`,
-    color: color,
-  }));
-
-  const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: `${title} - 색상을 선택하세요`,
-    matchOnDescription: true,
-    matchOnDetail: true,
-  });
-
-  return selected?.color;
-}
-
-// Webview로 컬러 팔레트 보여주기
+// Webview 컬러 팔레트
 async function showColorPaletteWebview(title: string, currentColor: string): Promise<string | undefined> {
   return new Promise((resolve) => {
     const prevEditor = vscode.window.activeTextEditor;
@@ -73,7 +55,6 @@ async function showColorPaletteWebview(title: string, currentColor: string): Pro
       enableScripts: true,
     });
 
-    // 팔레트 HTML 생성
     const colorBoxHtml = colorPalette
       .map(
         (color, idx) => `
@@ -192,7 +173,7 @@ async function showColorPaletteWebview(title: string, currentColor: string): Pro
       []
     );
 
-    // 사용자가 닫으면 undefined 반환 + 포커스 복원
+    // 닫으면 undefined 반환 + 포커스 복원
     panel.onDidDispose(
       async () => {
         resolve(undefined);
@@ -208,6 +189,8 @@ async function showColorPaletteWebview(title: string, currentColor: string): Pro
 
 function processText(input: string): string[] {
   return input
+    .replace(/"/g, '\\"') // 쌍따옴표를 이스케이프 처리
+    .replace(/'/g, "\\'") // 따옴표를 이스케이프 처리
     .replace(/\t+/g, ' ') // 탭을 공백으로 치환
     .replace(/\n +\n/g, '\n\n') // 공백으로 채워진 줄 제거
     .replace(/\n{2,}/g, '\n') // 여러 개의 연속된 빈 줄을 하나로 줄임
@@ -338,6 +321,81 @@ const executeCommand = async (includeCode: boolean, attrType: 'label' | 'option'
   }
 };
 
+// 텍스트에서 좌측 번호 패턴 제거 함수
+const removeLeftNumberPattern = (text: string): string => {
+  // 좌측에 있는 번호 패턴들을 정의 (^ 앵커로 문자열 시작 부분만 매칭)
+  const patterns = [
+    /^\d+\)\s*/, // 1), 2), 3) 등
+    /^\(\d+\)\s*/, // (1), (2), (3) 등
+    /^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]\s*/, // ①, ②, ③ 등
+    /^\d+\.\s*/, // 1., 2., 3. 등
+    /^\d+\s+/, // 1 , 2 , 3  등 (숫자 뒤에 공백)
+  ];
+
+  let result = text;
+
+  // 각 패턴을 순서대로 확인하여 매칭되는 첫 번째 패턴을 제거
+  for (const pattern of patterns) {
+    if (pattern.test(result)) {
+      result = result.replace(pattern, '');
+      break; // 첫 번째 매칭되는 패턴만 제거하고 종료
+    }
+  }
+
+  return result;
+};
+
+// dict / list 생성 함수
+const createOptionList = async (includeCode: boolean, attrType: 'dict' | 'list') => {
+  try {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      vscode.window.showErrorMessage('No active editor found!');
+      return;
+    }
+
+    const document = editor.document;
+    let selections = editor.selections;
+
+    for (const selection of selections) {
+      let text = document.getText(selection);
+      if (!text) {
+        text = '';
+      }
+
+      const lines = processText(text);
+
+      const printArray: string[] = [];
+
+      lines.forEach((line, index) => {
+        const result = removeLeftNumberPattern(line);
+        let appendText = `"${result}",`;
+
+        if (attrType === 'dict') {
+          printArray.push(`\t${index + 1}: ${appendText}`);
+        } else {
+          printArray.push(`\t"${result}",`);
+        }
+      });
+
+      let updatedText = checkDupeElement(printArray.join('\n'));
+
+      if (attrType === 'dict') {
+        updatedText = `{\n${updatedText}\n}`;
+      } else {
+        updatedText = `[\n${updatedText}\n]`;
+      }
+
+      editor.edit((editBuilder) => {
+        editBuilder.replace(selection, updatedText);
+      });
+    }
+  } catch (error: any) {
+    console.error(error);
+    vscode.window.showErrorMessage(`Error: ${error.message}`);
+  }
+};
+
 const createInputs = (base: string, inputType: 'text' | 'number') => {
   const hasLabels = /<label\b[^>]*>/i.test(base);
 
@@ -361,7 +419,8 @@ const createInputs = (base: string, inputType: 'text' | 'number') => {
     const labels = labelMatches
       ?.map((label, index) => {
         // for 속성 존재 여부 검사
-        const forMatch = label.match(/for\s*=\s*["']a(\d+)["']/);
+        const forMatch = label.match(/for\s*=\s*["']x(\d+)["']/);
+
         if (forMatch) {
           const forValue = forMatch[1];
           const setId = `${qnumber}x${forValue}`;
@@ -452,16 +511,60 @@ const createSelect = (base: string) => {
   return replaceHtml;
 };
 
+const matchDictionary = (base: string) => {
+  // Python dict 형식을 찾는 정규식 패턴
+  // { 로 시작해서 } 로 끝나는 패턴을 찾되, 중괄호 안의 내용도 포함
+  const dictPattern = /\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g;
+
+  const matches = base.match(dictPattern);
+
+  if (matches && matches.length > 0) {
+    // 첫 번째 매치된 dict를 반환
+    return matches[0];
+  }
+
+  return null;
+};
+
 export function activate(context: vscode.ExtensionContext) {
   // ctrl+1 : label 태그 생성
   const createLabel = vscode.commands.registerCommand('opsv-snd-editor.createLabel', () => {
-    executeCommand(false, 'label');
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    if (document.uri.path.toLowerCase().endsWith('.html')) {
+      // HTML
+      executeCommand(false, 'label');
+    }
+
+    // 파일 확장자가 ipynb 인 경우
+    if (document.uri.path.toLowerCase().endsWith('.ipynb')) {
+      // ipynb
+      createOptionList(false, 'list');
+    }
   });
   context.subscriptions.push(createLabel);
 
   // ctrl+shift+1 : 코드 매칭 label 태그 생성
   const createLabelWithValue = vscode.commands.registerCommand('opsv-snd-editor.createLabelWithValue', () => {
-    executeCommand(true, 'label');
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    if (document.uri.path.toLowerCase().endsWith('.html')) {
+      // HTML
+      executeCommand(true, 'label');
+    }
+
+    if (document.uri.path.toLowerCase().endsWith('.ipynb')) {
+      // ipynb
+      createOptionList(true, 'dict');
+    }
   });
   context.subscriptions.push(createLabelWithValue);
 
@@ -628,6 +731,24 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(createBoldTag);
 
+  // ctrl+u : underline
+  const createUnderlineTag = vscode.commands.registerCommand('opsv-snd-editor.createUnderlineTag', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    const selection = editor.selection;
+    let text = document.getText(selection);
+
+    editor.edit((editBuilder) => {
+      editBuilder.replace(selection, `<u>${text}</u>`);
+    });
+  });
+
+  context.subscriptions.push(createUnderlineTag);
+
   // ctrl+i : <i> Tag
   const createItalicTag = vscode.commands.registerCommand('opsv-snd-editor.createItalicTag', async () => {
     const editor = vscode.window.activeTextEditor;
@@ -701,6 +822,173 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
   context.subscriptions.push(changeBgColor);
+
+  // 공통 함수: 질문 생성 로직
+  const createQuestion = (questionType: 'sa' | 'ma' | 'rank' | 'scale' | 'text' | 'number') => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    let selections = editor.selections;
+
+    for (const selection of selections) {
+      const base = document.getText(selection).trim();
+      let qid = base.split('\n')[0].trim();
+      let title = base.split('\n').slice(1).join('\n');
+      let optionList = matchDictionary(title);
+
+      let hasOptions = false;
+      if (optionList !== null) {
+        title = title.replace(optionList, '').trim();
+        optionList = optionList.replace(/}$/, '\t}');
+        hasOptions = true;
+      } else {
+        optionList = '{}';
+      }
+
+      let pythonCode = '';
+
+      switch (questionType) {
+        case 'sa':
+          pythonCode = `${qid} = bl.sa(
+    qid='${qid}',
+    title=f'''
+${title}
+    ''',
+    options = ${optionList},
+    etc=False,
+    na=None,
+    rotation=False
+)`;
+          break;
+
+        case 'ma':
+        case 'rank':
+          pythonCode = `${qid} = bl.${questionType}(
+    qid='${qid}',
+    title=f'''
+${title}
+    ''',
+    options = ${optionList},
+    etc=False,
+    na=None,
+    min=1,
+    max=None,
+    rotation=False
+)`;
+          break;
+
+        case 'scale':
+          pythonCode = `${qid} = bl.scale(
+    qid='${qid}',
+    title=f'''
+${title}
+    ''',
+    left='',
+    center='',
+    right='',
+    score=5,
+)`;
+          break;
+
+        case 'text':
+          if (hasOptions) {
+            pythonCode = `${qid} = bl.text(
+    qid='${qid}',
+    title=f'''
+${title}
+    ''',
+    multi=${optionList},
+)`;
+          } else {
+            pythonCode = `${qid} = bl.text(
+    qid='${qid}',
+    title=f'''
+${title}
+    ''',
+)`;
+          }
+          break;
+
+        case 'number':
+          if (hasOptions) {
+            pythonCode = `${qid} = bl.number(
+    qid='${qid}',
+    title=f'''
+${title}
+    ''',
+    min=0,
+    max=999,
+    total=None,
+    multi=${optionList},
+    multi_post='',
+)`;
+          } else {
+            pythonCode = `${qid} = bl.number(
+    qid='${qid}',
+    title=f'''
+${title}
+    ''',
+    min=0,
+    max=999,
+    post_text=''
+)`;
+          }
+          break;
+      }
+
+      editor.edit((editBuilder) => {
+        editBuilder.replace(selection, pythonCode);
+      });
+    }
+  };
+
+  // ctrl+r : Create Radio Question
+  const createRadioQuestion = vscode.commands.registerCommand('opsv-snd-editor.createRadioQuestion', async () => {
+    createQuestion('sa');
+  });
+
+  context.subscriptions.push(createRadioQuestion);
+
+  // ctrl+m : Create Multiple Answer Question
+  const createMultipleAnswerQuestion = vscode.commands.registerCommand(
+    'opsv-snd-editor.createMultipleAnswerQuestion',
+    async () => {
+      createQuestion('ma');
+    }
+  );
+
+  context.subscriptions.push(createMultipleAnswerQuestion);
+
+  // ctrl+shift+r : Create Rank Question
+  const createRankQuestion = vscode.commands.registerCommand('opsv-snd-editor.createRankQuestion', async () => {
+    createQuestion('rank');
+  });
+
+  context.subscriptions.push(createRankQuestion);
+
+  // ctrl+shift+s : Create Scale Question
+  const createScaleQuestion = vscode.commands.registerCommand('opsv-snd-editor.createScaleQuestion', async () => {
+    createQuestion('scale');
+  });
+
+  context.subscriptions.push(createScaleQuestion);
+
+  // ctrl+t : Create Text Question
+  const createTextQuestion = vscode.commands.registerCommand('opsv-snd-editor.createTextQuestion', async () => {
+    createQuestion('text');
+  });
+
+  context.subscriptions.push(createTextQuestion);
+
+  // ctrl+n : Create Number Question
+  const createNumberQuestion = vscode.commands.registerCommand('opsv-snd-editor.createNumberQuestion', async () => {
+    createQuestion('number');
+  });
+
+  context.subscriptions.push(createNumberQuestion);
 }
 
 export function deactivate() {}
