@@ -72,7 +72,7 @@
         "    rotation=False",
         ")"
     ],
-    "description": "rank"
+    "description": "rank 2순위"
 },
 
 "Rank3": {
@@ -93,7 +93,7 @@
         "    rotation=False",
         ")"
     ],
-    "description": "rank"
+    "description": "rank 3순위"
 },
 
 "Rank4": {
@@ -114,7 +114,7 @@
         "    rotation=False",
         ")"
     ],
-    "description": "rank"
+    "description": "rank 4순위"
 },
 
 "Rank5": {
@@ -135,7 +135,7 @@
         "    rotation=False",
         ")"
     ],
-    "description": "rank"
+    "description": "rank 5순위"
 },
 
 
@@ -412,6 +412,7 @@
     "body": [
         "from beluga import Beluga, BelugaConfig",
         "from beluga.utils.html import box",
+        "from itertools import cycle",
         "",
         "bl = Beluga(config=BelugaConfig(",
         "    etc_text='기타(직접 입력)',",
@@ -419,7 +420,16 @@
         "    dropdown_placeholder='하나 선택...',",
         "    total_text='합계',",
         "    display=True",
-        "))"
+        "))",
+        "",
+        "",
+        "colors = cycle([",
+        "    '#1446BE', # Blue",
+        "    '#00A453', # Green",
+        "    '#961E8C', # Purple",
+        "    '#FF268A', # Pink",
+        "])",
+        "# color = next(colors)",
     ],
     "description": "beluga import and config"
 },
