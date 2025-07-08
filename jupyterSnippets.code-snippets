@@ -329,7 +329,7 @@
         "    multi={",
         "        ${3}",
         "    },",
-        "    multi_post='%'",
+        "    post_text='%'",
         ")"
     ],
     "description": "multiple number"
@@ -398,10 +398,9 @@
         "    options={",
         "        ${3}",
         "    },",
-        "    rows={",
+        "    multi={",
         "        ${4}",
         "    },",
-        "    row_cond=None,",
         "    duplicate=False",
         ")"
     ],

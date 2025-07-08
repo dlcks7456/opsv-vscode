@@ -923,7 +923,7 @@ ${title}
     max=999,
     total=None,
     multi=${optionList},
-    multi_post='',
+    post_text='',
 )`;
           } else {
             pythonCode = `${qid} = bl.number(
