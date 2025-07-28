@@ -322,31 +322,42 @@ const executeCommand = async (includeCode: boolean, attrType: 'label' | 'option'
 };
 
 // 텍스트에서 좌측 번호 패턴 제거 함수
-const removeLeftNumberPattern = (text: string): string => {
+// text를 넣으면 처음 발견되는 패턴에서 오직 숫자만 code에 넣고, 패턴을 제외한 결과는 result에 담음
+const removeLeftNumberPattern = (text: string): { code: string | null; result: string } => {
   // 좌측에 있는 번호 패턴들을 정의 (^ 앵커로 문자열 시작 부분만 매칭)
-  const patterns = [
-    /^\d+\)\s*/, // 1), 2), 3) 등
-    /^\(\d+\)\s*/, // (1), (2), (3) 등
-    /^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]\s*/, // ①, ②, ③ 등
-    /^\d+\.\s*/, // 1., 2., 3. 등
-    /^\d+\s+/, // 1 , 2 , 3  등 (숫자 뒤에 공백)
+  const patterns: { regex: RegExp; extract: (match: RegExpMatchArray) => string }[] = [
+    { regex: /^(\d+)\)\s*/, extract: (m) => m[1] }, // 1), 2), 3) 등
+    { regex: /^\((\d+)\)\s*/, extract: (m) => m[1] }, // (1), (2), (3) 등
+    {
+      regex: /^([①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳])\s*/,
+      extract: (m) => {
+        // 유니코드 서수 → 숫자 변환
+        const circledNums = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳';
+        const idx = circledNums.indexOf(m[1]);
+        return idx !== -1 ? String(idx + 1) : '';
+      },
+    }, // ①, ②, ③ 등
+    { regex: /^(\d+)\.\s*/, extract: (m) => m[1] }, // 1., 2., 3. 등
+    { regex: /^(\d+)\s+/, extract: (m) => m[1] }, // 1 , 2 , 3  등 (숫자 뒤에 공백)
   ];
 
+  let code = null;
   let result = text;
 
-  // 각 패턴을 순서대로 확인하여 매칭되는 첫 번째 패턴을 제거
-  for (const pattern of patterns) {
-    if (pattern.test(result)) {
-      result = result.replace(pattern, '');
+  for (const { regex, extract } of patterns) {
+    const match = text.match(regex);
+    if (match) {
+      code = extract(match);
+      result = text.replace(regex, '').trim();
       break; // 첫 번째 매칭되는 패턴만 제거하고 종료
     }
   }
 
-  return result;
+  return { code, result };
 };
 
-// dict / list 생성 함수
-const createOptionList = async (includeCode: boolean, attrType: 'dict' | 'list') => {
+// dict 생성 함수
+const createOptionList = async (includeCode: boolean, attrType: 'order' | 'match') => {
   try {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -366,24 +377,42 @@ const createOptionList = async (includeCode: boolean, attrType: 'dict' | 'list')
       const lines = processText(text);
 
       const printArray: string[] = [];
+      const duplicateLabel: string[] = [];
+      const duplicateCode: any = [];
 
       lines.forEach((line, index) => {
-        const result = removeLeftNumberPattern(line);
-        let appendText = `"${result}",`;
-
-        if (attrType === 'dict') {
-          printArray.push(`\t${index + 1}: ${appendText}`);
+        const { result: label, code } = removeLeftNumberPattern(line);
+        const cleanText = line.trim();
+        if (attrType === 'match') {
+          printArray.push(`\t${code}: "${label}",`);
+          duplicateCode.push(code);
+          duplicateLabel.push(label.replace(' ', ''));
         } else {
-          printArray.push(`\t"${result}",`);
+          printArray.push(`\t${index + 1}: "${cleanText}",`);
+          duplicateLabel.push(cleanText.replace(' ', ''));
         }
       });
 
       let updatedText = checkDupeElement(printArray.join('\n'));
+      updatedText = `{\n${updatedText}\n}`;
 
-      if (attrType === 'dict') {
-        updatedText = `{\n${updatedText}\n}`;
-      } else {
-        updatedText = `[\n${updatedText}\n]`;
+      const errors: string[] = [];
+
+      const dupeCheck = (arr: any) => {
+        return arr.length !== new Set(arr).size;
+      };
+
+      if (dupeCheck(duplicateLabel)) {
+        errors.push('중복된 라벨이 있습니다.');
+      }
+
+      if (attrType === 'match' && dupeCheck(duplicateCode)) {
+        errors.push('중복된 코드가 있습니다.');
+      }
+
+      if (errors.length > 0) {
+        let errorText = errors.map((err) => `# ${err}`).join('\n');
+        updatedText = `${updatedText}\n${errorText}`;
       }
 
       editor.edit((editBuilder) => {
@@ -527,6 +556,94 @@ const matchDictionary = (base: string) => {
 };
 
 export function activate(context: vscode.ExtensionContext) {
+  // ctrl+0 : Switching Code & Label
+  const switchingCodeLabel = vscode.commands.registerCommand('opsv-snd-editor.switchingCodeLabel', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      vscode.window.showErrorMessage('No active editor found.');
+      return;
+    }
+
+    const document = editor.document;
+    const selections = editor.selections;
+
+    try {
+      for (const selection of selections) {
+        const selectedText = document.getText(selection).trim();
+
+        if (!selectedText) {
+          vscode.window.showWarningMessage('No text selected.');
+          continue;
+        }
+
+        // 줄별로 처리
+        const lines = selectedText.split('\n').map((line) => line.trim());
+        const filteredLines = lines.filter((line) => line !== '');
+
+        const processedLines = filteredLines.map((line) => {
+          const lastTabIndex = line.lastIndexOf('\t');
+          const lastSpaceIndex = line.lastIndexOf(' ');
+
+          if (lastTabIndex !== -1) {
+            // 탭 기준으로 분리
+            const content = line.slice(0, lastTabIndex).trim();
+            const code = line.slice(lastTabIndex + 1).trim();
+            if (/^\d+$/.test(code)) {
+              return `${code}\t${content}`;
+            }
+          } else if (lastSpaceIndex !== -1) {
+            // 공백 기준으로 분리
+            const content = line.slice(0, lastSpaceIndex).trim();
+            const code = line.slice(lastSpaceIndex + 1).trim();
+            if (/^\d+$/.test(code)) {
+              return `${code}\t${content}`;
+            }
+          }
+
+          // 처리할 수 없는 경우 그대로 반환
+          return line;
+        });
+
+        const outputText = processedLines.join('\n');
+
+        await editor.edit((editBuilder) => {
+          editBuilder.replace(selection, outputText);
+        });
+      }
+    } catch (error: any) {
+      console.error(error);
+      vscode.window.showErrorMessage(`An error occurred while processing the command: ${error.message}`);
+    }
+  });
+
+  context.subscriptions.push(switchingCodeLabel);
+
+  // ctrl+shift+0 : 보기 번호 제거
+  const removeCodeNumber = vscode.commands.registerCommand('opsv-snd-editor.removeCodeNumber', () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    let selections = editor.selections;
+
+    for (const selection of selections) {
+      let base: string[] = document.getText(selection).trim().split('\n');
+      let replaceHtml: string[] = [];
+
+      base.forEach((line) => {
+        const { result: label, code } = removeLeftNumberPattern(line.trim());
+        replaceHtml.push(label);
+      });
+
+      editor.edit((editBuilder) => {
+        editBuilder.replace(selection, replaceHtml.join('\n'));
+      });
+    }
+  });
+  context.subscriptions.push(removeCodeNumber);
+
   // ctrl+1 : label 태그 생성
   const createLabel = vscode.commands.registerCommand('opsv-snd-editor.createLabel', () => {
     const editor = vscode.window.activeTextEditor;
@@ -543,7 +660,7 @@ export function activate(context: vscode.ExtensionContext) {
     // 파일 확장자가 ipynb 인 경우
     if (document.uri.path.toLowerCase().endsWith('.ipynb')) {
       // ipynb
-      createOptionList(false, 'list');
+      createOptionList(false, 'order');
     }
   });
   context.subscriptions.push(createLabel);
@@ -563,7 +680,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (document.uri.path.toLowerCase().endsWith('.ipynb')) {
       // ipynb
-      createOptionList(true, 'dict');
+      createOptionList(true, 'match');
     }
   });
   context.subscriptions.push(createLabelWithValue);

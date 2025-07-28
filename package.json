@@ -4,7 +4,7 @@
   "description": "Opensurvey Editor Snippets and shourtCuts",
   "publisher": "Opensurvey-Chuck",
   "icon": "images/icon.png",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/dlcks7456/opsv-vscode.git"
@@ -104,6 +104,14 @@
       {
         "command": "opsv-snd-editor.createNumberQuestion",
         "title": "Create Number Question"
+      },
+      {
+        "command": "opsv-snd-editor.switchingCodeLabel",
+        "title": "Switching Code & Label"
+      },
+      {
+        "command": "opsv-snd-editor.removeCodeNumber",
+        "title": "Remove Code Number"
       }
     ],
     "keybindings": [
@@ -111,6 +119,16 @@
         "command": "opsv-snd-editor.copyForEditor",
         "key": "ctrl+shift+c",
         "when": "editorTextFocus && editorLangId == 'html'"
+      },
+      {
+        "command": "opsv-snd-editor.switchingCodeLabel",
+        "key": "ctrl+0",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
+      },
+      {
+        "command": "opsv-snd-editor.removeCodeNumber",
+        "key": "ctrl+shift+d",
+        "when": "editorTextFocus && (editorLangId == 'html' || resourceExtname == '.ipynb')"
       },
       {
         "command": "opsv-snd-editor.createLabel",
