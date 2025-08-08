@@ -1914,5 +1914,41 @@
     "scope": "js",
     "body": ["validate(()=>{", "  if( ${1:errorCond} ){", "    return softErr('ERROR MESSAGE');", "  }", "})"],
     "description": "[유효성 검증] 소프트 에러메세지"
+  },
+  "sameQuestionRotationOrder": {
+    "prefix": "pre-q-same",
+    "scope": "js",
+    "body": [
+"const firstGroup = [${1}]; // 첫 번째 문항 로테이션 기준으로 작동",
+"",
+"const rotationIndex = firstGroup.map((v, index) => String(index));",
+"// [window.conceptIndex]를 setGroupSet의 3번째 arg에 추가",
+"window.conceptIndex = rotationIndex",
+"  .map((value) => ({ value, sort: Math.random() }))",
+"  .sort((a, b) => a.sort - b.sort)",
+"  .map(({ value }) => value);",
+"",
+"window.optionOrderSet = (indexOrder) => {",
+"  const question = \\$(`#survey\\${cur}`);",
+"  const answerWrappers = [...question.find(`.answer-choice-wrapper`)];",
+"  const options = answerWrappers.filter((wrapper) => \\$(wrapper).find('input').val() !== '-1');",
+"  const bottomOptions = answerWrappers.filter((wrapper) => \\$(wrapper).find('input').val() === '-1');",
+"  const target = question.find('.answer-wrapper');",
+"",
+"  indexOrder.forEach((groupIndexStr) => {",
+"    const groupIndex = Number(groupIndexStr);",
+"    if (options[groupIndex]) {",
+"      \\$(target).append(options[groupIndex]);",
+"    }",
+"  });",
+"",
+"  bottomOptions.forEach((option) => {",
+"    \\$(target).append(option);",
+"  });",
+"",
+"  return true;",
+"};"
+    ],
+    "description": "[사전 로직] 문항 로테이션 통일 / 보기 순서 통일"
   }
 }

@@ -950,7 +950,7 @@
     "EID = bl.sa(",
     "    qid='EID',",
     "    title=f'''ID''',",
-    "    cond='setAnswer(2, ValueType.TEXT, EID, true) && false'",
+    "    cond='setAnswer(cur, ValueType.TEXT, EID, true) && false'",
     ")",
     ],
     "description": "해외조사 기본 세팅 quotaFlag / EID"
