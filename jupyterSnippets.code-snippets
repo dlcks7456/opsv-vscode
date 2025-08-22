@@ -411,6 +411,7 @@
     "body": [
         "from beluga import Beluga, BelugaConfig",
         "from beluga.utils.html import box",
+        "from beluga.utils import quota_combination",
         "from itertools import cycle",
         "",
         "bl = Beluga(config=BelugaConfig(",
@@ -947,13 +948,22 @@
     "    cond='false'",
     ")",
     "",
-    "EID = bl.sa(",
+    "EID = bl.text(",
     "    qid='EID',",
-    "    title=f'''ID''',",
+    "    title=f'''Primary Key''',",
     "    cond='setAnswer(cur, ValueType.TEXT, EID, true) && false'",
     ")",
     ],
     "description": "해외조사 기본 세팅 quotaFlag / EID"
 },
 
+"quotaCombination": {
+    "prefix": "quota-comb",
+    "body": [
+        "quota_combination('''",
+        "    ${1}",
+        "''')",
+    ],
+    "description": "quota 조건 별 조합 생성"
+},
 }
