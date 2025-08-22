@@ -2776,27 +2776,6 @@
     ],
     "description": "[슬라이드쇼] 특정 문항의 보기 이미지를 슬라이드쇼로 구현"
   },
-  "optionRotationRandomReverse": {
-    "prefix": "opt-rv",
-    "scope": "js",
-    "body": [
-      "(() => {",
-      "  const question = \\$(`#survey\\${cur}`);",
-      "  const wrappers = question.find(`.answer-choice-wrapper`);",
-      "  const ranks = [...wrappers.find(`#rank`)].map((e) => Number(e.value));",
-      "  const isAsc = Math.random() < 0.5;",
-      "  const sortedRanks = ranks.sort((a, b) => (isAsc ? a - b : b - a));",
-      "  const answerWrapper = question.find('.answer-wrapper');",
-      "  sortedRanks.forEach((code) => {",
-      "    const option = [...wrappers].find((wrapper) => Number(\\$(wrapper).find('input').val()) === code);",
-      "    answerWrapper.append(option);",
-      "  });",
-      "",
-      "  return true;",
-      "})()",
-    ],
-    "description": "보기를 정/역순을 랜덤으로 제시"
-  },
   "conceptRotationMaster": {
     "prefix": "concept",
     "scope": "js",
@@ -2876,7 +2855,7 @@
     "scope": "js",
     "body": [
       "(() => {",
-      "  const base = 1;",
+      "  const base = ${1:1};",
       "  const answers = getAnswerSet(base).answers;",
       "  if (answers.length > 0) {",
       "    // 첫번째 응답 기준",
@@ -2946,7 +2925,7 @@
     ],
     "description": "NET 로직 (소분류)"
   },
-  "optionReverse": {
+  "optionRotationRandomReverse": {
     "prefix": "opt-rv",
     "scope": "js",
     "body": [
