@@ -4,7 +4,7 @@
   "description": "Opensurvey Editor Snippets and shourtCuts",
   "publisher": "Opensurvey-Chuck",
   "icon": "images/icon.png",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "repository": {
     "type": "git",
     "url": "https://github.com/dlcks7456/opsv-vscode.git"
@@ -112,6 +112,10 @@
       {
         "command": "opsv-snd-editor.removeCodeNumber",
         "title": "Remove Code Number"
+      },
+      {
+        "command": "opsv-snd-editor.reverseOptionText",
+        "title": "Line Reverse"
       }
     ],
     "keybindings": [
@@ -229,6 +233,11 @@
         "command": "opsv-snd-editor.createNumberQuestion",
         "key": "ctrl+n",
         "when": "editorTextFocus && resourceExtname == '.ipynb'"
+      },
+      {
+        "command": "opsv-snd-editor.reverseOptionText",
+        "key": "ctrl+shift+/",
+        "when": "editorTextFocus && (editorLangId == 'html' || editorLangId == 'javascript' || resourceExtname == '.ipynb')"
       }
     ],
     "snippets": [

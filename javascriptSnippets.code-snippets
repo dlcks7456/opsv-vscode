@@ -73,6 +73,21 @@
     ],
     "description": "[리다이렉트] 톨루나"
   },
+  "pmiRedirect": {
+    "prefix": "pmi",
+    "scope": "js",
+    "body": [
+      "// PMI",
+      "const sid = '${1:sid}';",
+      "const redirect = {",
+      "  // Redirect URL",
+      "  screenout: `https://out.pmirnc.com/?sid=\\${sid}&eid=\\${EID}&st=S&stdt=SO1`,",
+      "  complete: `https://out.pmirnc.com/?sid=\\${sid}&eid=\\${EID}&st=C&stdt=CO1`,",
+      "  quotafull: `https://out.pmirnc.com/?sid=\\${sid}&eid=\\${EID}&st=Q&stdt=QO`,",
+      "};",
+    ],
+    "description": "[리다이렉트] PMI"
+  },
   "quotaSetting": {
     "prefix": "quota",
     "scope": "js",

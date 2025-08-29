@@ -618,7 +618,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(switchingCodeLabel);
 
-  // ctrl+shift+0 : 보기 번호 제거
+  // ctrl+shift+d : 보기 번호 제거
   const removeCodeNumber = vscode.commands.registerCommand('opsv-snd-editor.removeCodeNumber', () => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -1106,6 +1106,26 @@ ${title}
   });
 
   context.subscriptions.push(createNumberQuestion);
+
+  // ctrl+shift+0 : Reverse Options
+  const reverseOptionText = vscode.commands.registerCommand('opsv-snd-editor.reverseOptionText', async () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    const selection = editor.selection;
+    const base = document.getText(selection).trim();
+    const splitLine = base.split('\n');
+    splitLine.reverse();
+
+    editor.edit((editBuilder) => {
+      editBuilder.replace(selection, splitLine.join('\n'));
+    });
+  });
+
+  context.subscriptions.push(reverseOptionText);
 }
 
 export function deactivate() {}
